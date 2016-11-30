@@ -1,19 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Hexo</title>
-  
+  <title>Wonder Zone</title>
+  <subtitle>A place full of miracles</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-11-29T15:07:04.732Z</updated>
+  <updated>2016-11-30T14:46:22.999Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
-    <name>John Doe</name>
+    <name>Gallon Yin</name>
     
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Care</title>
+    <link href="http://yoursite.com/2016/11/30/Care/"/>
+    <id>http://yoursite.com/2016/11/30/Care/</id>
+    <published>2016-11-30T14:46:22.000Z</published>
+    <updated>2016-11-30T14:46:22.999Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>My New Post</title>
+    <link href="http://yoursite.com/2016/11/30/My-New-Post/"/>
+    <id>http://yoursite.com/2016/11/30/My-New-Post/</id>
+    <published>2016-11-30T13:40:53.000Z</published>
+    <updated>2016-11-30T13:40:53.501Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
