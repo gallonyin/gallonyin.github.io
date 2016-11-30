@@ -15,32 +15,4 @@
     
   </url>
   
-  <url>
-    <loc>http://yoursite.com/zone/index.html</loc>
-    
-    <lastmod>2016-11-30T13:58:26.594Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/tags/index.html</loc>
-    
-    <lastmod>2016-11-30T13:51:35.365Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/11/30/My-New-Post/</loc>
-    
-    <lastmod>2016-11-30T13:40:53.501Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/11/28/hello-world/</loc>
-    
-    <lastmod>2016-11-29T15:07:04.732Z</lastmod>
-    
-  </url>
-  
 </urlset>
