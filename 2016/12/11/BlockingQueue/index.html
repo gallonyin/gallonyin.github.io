@@ -88,6 +88,7 @@ public class QueueActivity extends AppCompatActivity implements View.OnClickList
             }
         }
         queue.add(obj);
+        //如果添加一个元素后集合大小为1则应该唤醒阻塞的线程是否需要该元素出队(如果有阻塞)
         if (queue.size() == 1) {
             notifyAll();
         }
@@ -111,6 +112,7 @@ public class QueueActivity extends AppCompatActivity implements View.OnClickList
         try {
             return queue.remove();
         } finally {
+            //如果取出一个元素后集合大小=limit-1则应该唤醒阻塞的线程入队(如果有阻塞)
             if (queue.size() == limit - 1) {
                 notifyAll();
             }
@@ -140,60 +142,66 @@ public class QueueActivity extends AppCompatActivity implements View.OnClickList
 12-11 21:10:07.265 18459-18855/com.example.test.test E/QueueActivity: putSleepCount: 0
 12-11 21:10:07.265 18459-19469/com.example.test.test E/QueueActivity: take: 0
 从中可以看出 在达到 limit 值后 put 操作会被阻塞，而之后的 take 操作会唤醒所有的阻塞线程再次判断并加入队列
-</code></pre><p>附：<br>使用 lock / condition 实现如下：</p>
-<pre><code>import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-
-class Test {
-    private  final Lock lock;
-    private  final Condition notFull;
-    private  final Condition notEmpty;
-    private int maxSize;
-    private List&lt;Date&gt; storage;
-    Test(int size){
-        //使用锁lock，并且创建两个condition，相当于两个阻塞队列
-        lock=new ReentrantLock();
-        notFull=lock.newCondition();
-        notEmpty=lock.newCondition();
-        maxSize=size;
-        storage=new LinkedList&lt;&gt;();
+</code></pre><p>附：<br>使用 lock / condition 实现部分代码如下(JDK 1.7 ArrayBlockingQueue)：</p>
+<pre><code>//构造方法
+public ArrayBlockingQueue(int capacity, boolean fair) {
+        if (capacity &lt;= 0)
+            throw new IllegalArgumentException();
+        //创建数组    
+        this.items = new Object[capacity];
+        //创建锁和阻塞条件
+        lock = new ReentrantLock(fair);   
+        notEmpty = lock.newCondition();
+        notFull =  lock.newCondition();
     }
-
-    public void put() {
-        lock.lock();
-        try {   
-            while (storage.size() == maxSize){
+//添加元素的方法
+public void put(E e) throws InterruptedException {
+        checkNotNull(e);
+        final ReentrantLock lock = this.lock;
+        lock.lockInterruptibly();
+        try {
+            while (count == items.length)
                 notFull.await();
-            }
-            storage.add(new Date());        
-            notEmpty.signalAll();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }finally{   
+            //如果队列不满就入队
+            enqueue(e);
+        } finally {
             lock.unlock();
         }
     }
-
-    public  void take() {       
-        lock.lock();
-        try {  
-            while (storage.size() == 0){
+ //入队的方法
+ private void enqueue(E x) {
+        final Object[] items = this.items;
+        items[putIndex] = x;
+        if (++putIndex == items.length)
+            putIndex = 0;
+        count++;
+        notEmpty.signal();
+    }
+ //移除元素的方法
+ public E take() throws InterruptedException {
+        final ReentrantLock lock = this.lock;
+        lock.lockInterruptibly();
+        try {
+            while (count == 0)
                 notEmpty.await();
-            }
-            Date d=((LinkedList&lt;Date&gt;)storage).poll();      
-            notFull.signalAll();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }finally{
+            return dequeue();
+        } finally {
             lock.unlock();
         }
-    } 
-}
+    }
+ //出队的方法
+ private E dequeue() {
+        final Object[] items = this.items;
+        @SuppressWarnings(&quot;unchecked&quot;)
+        E x = (E) items[takeIndex];
+        items[takeIndex] = null;
+        if (++takeIndex == items.length)
+            takeIndex = 0;
+        count--;
+        if (itrs != null)
+            itrs.elementDequeued();
+        notFull.signal();
+        return x;
 </code></pre><p>这样做的优点是调用 notEmpty.signalAll()只会唤醒  notEmpty.await()下的线程，notFull 同理，但是通常不可能同时存在两种条件(入队和出队同时)阻塞。在Condition中，用await()替换wait()，用signal()替换notify()，用signalAll()替换notifyAll()，这里注意，Condition是被绑定到Lock上的，要创建一个Lock的Condition必须用newCondition()方法。<br>当然本文并不是为了比较两种实现方法的优劣，而且只要理解第一种就很容易理解第二种，本文只是通过 demo 让大家理解阻塞式队列的原理从而知道为什么使用它，或能对阻塞式队列多一点了解。</p>
 </div></article><div class="tags"></div><div class="paginator"><a href="/2016/11/30/Care/" class="next"><span>Next</span><i class="iconfont icon-right"></i></a></div><section id="comments"><div id="disqus_thread"></div></section><script type="text/javascript">var disqus_config = function () {
     this.page.url = 'http://yoursite.com/2016/12/11/BlockingQueue/';
