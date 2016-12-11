@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-12-11T13:37:35.261Z</updated>
+  <updated>2016-12-11T13:51:35.437Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>阻塞式队列的实现原理 BlockingQueue [java]</title>
+    <title>阻塞式队列的实现原理 BlockingQueue [Java]</title>
     <link href="http://yoursite.com/2016/12/11/BlockingQueue/"/>
     <id>http://yoursite.com/2016/12/11/BlockingQueue/</id>
     <published>2016-12-10T16:20:42.555Z</published>
-    <updated>2016-12-11T13:37:35.261Z</updated>
+    <updated>2016-12-11T13:51:35.437Z</updated>
     
     <content type="html"><![CDATA[<h4 id="阻塞式队列的实现方式"><a href="#阻塞式队列的实现方式" class="headerlink" title="阻塞式队列的实现方式"></a>阻塞式队列的实现方式</h4><p>首先，阻塞队列 ( BlockingQueue )是 Java util.concurrent 包下重要的数据结构。当阻塞队列进行插入数据时，如果队列已满，线程将会阻塞等待直到队列非满；从阻塞队列取数据时，如果队列已空，线程将会阻塞等待直到队列非空。本文与 java 官方的阻塞式队列不同，自己以另一种方式(线程 wait / notifyAll )实现(原理相似)，本案 demo 遵循 FIFO (先进先出)原则，只写出了 put (阻塞)/ take (阻塞)方法，官方实现还含有 add / remove (失败抛出异常)、offer / poll (失败时返回值不同)、offer / poll (重载 增加 timeout 阻塞时间限制，并返回值是否成功)在这里都没有写出。除此之外 lock / condition 方式实现也附在文中最下方以供对比。本案 demo 使用 Android UI 但是只需懂得 java 基本语法，不会影响理解。<br><a id="more"></a></p>
 <h4 id="相关应用-生产者消费者模式"><a href="#相关应用-生产者消费者模式" class="headerlink" title="相关应用:生产者消费者模式"></a>相关应用:生产者消费者模式</h4><p>为能够解决绝大多数并发问题，该模式通过平衡生产线程和消费线程的工作能力来提高程序的整体处理数据的速度。当然，这不是这次要讲的重点，如果有兴趣可以去了解阻塞式队列处理高并发问题。</p>
