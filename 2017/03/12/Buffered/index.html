@@ -72,7 +72,7 @@ while((len = bis.read(arr)) != -1) {
 <li>bis.read() 返回的是下一个字节 (the next byte of data) ，而 bis.read(b) 返回的是读取的长度 (the buffer into which the data is read)，如果还没读到文件结尾，该长度就是数组长度</li>
 <li>fos.write(arr, 0, len); 不能替换为 fos.write(arr); 因为在最后一次 fis.read 读取时 len 不等于自定义字节数组的长度，就会导致文件末尾写入的数据错误，甚至文件损毁</li>
 <li>如果输入的缓冲区和输出的缓冲区不是同一个数组，那也最好保证设置数组长度一致，否则会影响性能。请开发者减少不必要的缓冲流滥用。</li>
-<li>byte[] arr = new byte[1024 * 8]; 自定义缓冲数组的大小，可以根据实际情况(大量碎片文件还是大文件传输等)调整，通常为1024 x 2的n次幂 </li>
+<li>byte[] arr = new byte[1024 * 8]; 自定义缓冲数组的大小，可以根据实际情况(大量碎片文件还是大文件传输等)调整，通常为1024 * 2的n次幂 </li>
 </ul>
 </div></article><div class="tags"></div><div class="paginator"><a href="/2016/12/11/BlockingQueue/" class="next"><span>Next</span><i class="iconfont icon-right"></i></a></div><section id="comments"><div id="disqus_thread"></div></section><script type="text/javascript">var disqus_config = function () {
     this.page.url = 'http://yoursite.com/2017/03/12/Buffered/';
