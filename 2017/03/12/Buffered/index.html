@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="Gallon Yin"><meta name="description" content="首先，一次IO的代价是很高的，所以减少IO次数将会极大提升性能。提高文件读写性能，是每一位开发者都要考虑的，也是本文的核心目的，如果已经对Java中的IO流比较熟悉，可以直接拖到最后看结论。基本概念IO流用来处理设备之间的数据传输，Java对数据的操作是通过"><meta name="keywords" content=""><title>BufferedInput/OutputStream 缓冲流性能测试 [Java] · Wonder Zone</title><link rel="icon" href="/website.ico"><link rel="canonical" href="http://yoursite.com/2017/03/12/Buffered/"><link rel="alternate" href="/atom.xml" title="Wonder Zone"><link rel="stylesheet" href="/css/style.css"><script type="text/javascript">var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?Your baidu Analytics ID";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script type="text/javascript">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'Your Google Analytics ID', 'auto');
+ga('send', 'pageview');</script></head><body><div id="main"><header><a href="/." class="logo">Wonder Zone</a><ul class="nav"><li class="nav-link"><a href="/" target="_self">首页</a></li><li class="nav-link"><a href="/archives/" target="_self">归档</a></li><li class="nav-link"><a href="/about/" target="_self">关于</a></li></ul></header><section id="container"><article class="post"><h1 class="post-title">BufferedInput/OutputStream 缓冲流性能测试 [Java]</h1><span class="post-time">2017年3月12日</span><div id="sidebar" class="post-sidebar"><h3 class="heading">目录</h3><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#基本概念"><span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基本实现"><span class="toc-text">基本实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#注意"><span class="toc-text">注意</span></a></li></ol></div><div class="post-content"><p>首先，一次 IO 的代价是很高的，所以减少 IO 次数将会极大提升性能。提高文件读写性能，是每一位开发者都要考虑的，也是本文的核心目的，如果已经对 Java 中的 IO 流比较熟悉，可以直接拖到最后看结论。</p>
+<h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>IO 流用来处理设备之间的数据传输，Java 对数据的操作是通过流的方式，用于操作流的类都在 IO 包内，按流向分为输入流，输出流；按流操作分为字节流，字符流，其中字节流可以操作任何数据，因为在计算机中任何数据都是以字节的形式存储，字符流只能操作纯字符数据，比较方便。字节流的抽象父类：InputStream，OutputStream；字符流的抽象父类：Reader，Writer。</p>
+<a id="more"></a>  
+<h4 id="基本实现"><a href="#基本实现" class="headerlink" title="基本实现"></a>基本实现</h4><p>由于已知减少 IO 次数可以大幅提升性能，如果我们想进行文件拷贝，最快速的方法是把文件全部读取到内存再全部写出到目标地址，如</p>
+<pre><code>FileInputStream fis = new FileInputStream(&quot;source.rar&quot;);
+FileOutputStream fos = new FileOutputStream(&quot;copy.rar&quot;);
+byte[] arr = new byte[fis.available()];      //获得文件大小做为字节数组
+fis.read(arr);                                //将文件上的所有字节读取到数组
+fos.write(arr);                                //将数组中的所有字节一次写到文件上
+fis.close();
+fos.close();
+</code></pre><p>因为这样就完成了最少的磁盘访问次数，所以 IO 性能很高，但是如果文件过大，就非常容易造成内存溢出。因此我们改进后的代码：  </p>
+<pre><code>FileInputStream fis = new FileInputStream(&quot;source.rar&quot;);
+FileOutputStream fos = new FileOutputStream(&quot;copy.rar&quot;);
+int len;
+byte[] arr = new byte[1024 * 8];            //自定义字节数组
+while((len = fis.read(arr)) != -1) {
+    fos.write(arr, 0, len);                    //写出字节数组的有效字节个数
+}
+fis.close();
+fos.close();
+</code></pre><p>Java 早已考虑到了 IO 性能问题，为了方便开发者，在 JDK1.0 IO 包下就有 BufferedInputStream 和 BufferedOutputStream 分别是 FilterInputStream 类和 FilterOutputStream 类的子类，实现了装饰设计模式。该流使用缓冲思想，内置一个缓冲区(数组)，BufferedInputStream 会一次从文件中读取 8192 个字节(默认构造)，存在缓冲区中，程序再次读取时直接从缓存区获取，避免访问磁盘；BufferedOutputStream 向流中写出文件也是先写到缓冲区中，直到缓冲区写满才一次性写到文件里。</p>
+<pre><code>FileInputStream fis = new FileInputStream(&quot;source.rar&quot;);    //创建文件输入流对象,关联source.rar
+BufferedInputStream bis = new BufferedInputStream(fis);        //创建缓冲区对fis装饰
+FileOutputStream fos = new FileOutputStream(&quot;copy.rar&quot;);    //创建输出流对象,关联copy.rar
+BufferedOutputStream bos = new BufferedOutputStream(fos);    //创建缓冲区对fos装饰
+int b;
+while((b = bis.read()) != -1) {        
+    bos.write(b);
+}
+bis.close();                                                //关流只关装饰后的对象即可
+bos.close();
+</code></pre><p>设备 Samsung Galaxy J  Android4.4 内部存储空间  不同测试参数均取十次数据计算平均值<br>source.rar 约50mb 进行单次文件拷贝<br>BufferedInputStream 缩写 bis   BufferedOutputStream 缩写 bos<br>FileInputStream 缩写 fis  FileOutputStream 缩写 fos</p>
+<p>方式一：</p>
+<pre><code>while((b = bis.read()) != -1) {    
+    bos.write(b);
+}
+</code></pre><p>  用时 32760ms-38593ms 平均 35628ms<br>  拷贝一个50mb的文件大约用了35秒！</p>
+<p>方式二：</p>
+<pre><code>byte[] arr = new byte[1024 * 8];            
+while((len = fis.read(arr)) != -1) {
+    fos.write(arr, 0, len);                    
+}
+</code></pre><p>  用时  622ms-661ms 平均 641.5ms<br>  没有使用缓冲流，自定义缓冲数组的方式，时间控制在一秒以内，比较正常。</p>
+<p>方式三：</p>
+<pre><code>byte[] arr = new byte[1024 * 8];        
+while((len = bis.read(arr)) != -1) {
+    fos.write(arr, 0, len);                    
+}
+</code></pre><p>  用时 614ms-687ms 平均 651.9md<br>  查看 bis.read(arr) 的源码，可以看出还是调用了 fis 的 read(b, off, len) 方法。和预期一致：性能几乎等同方式二，但是多创建了很多对象，造成了不必要的浪费。</p>
+<p>方式四：</p>
+<pre><code>while((b = fis.read()) != -1) {        
+    bos.write(b);
+}
+</code></pre><p>  用时 1087411ms 约18分钟<br>  如果每个字节都进行 IO 操作，不增加缓冲数组，导致的性能下降是非常严重的。</p>
+<p>结论：不难发现，以上四种方式中，第二种方式可以提供我们更好的性能，使用缓冲流在方式三中并没有提高效率，反而在方式一中会大大降低效率。<strong>我的个人观点是大多数情况下使用 java.io 都不需要用到 Buffered 类</strong>，我们可以先搞清楚 Buffered 类的原理，Buffered 的原理就是减少 IO，而我们可以通过简单的方式实现。Buffered 类会操作两个数组(输入流管理一个，输出流管理一个)，而我们自定义的数组只需要一个，节省了内存又提高了性能。</p>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ul>
+<li>read() 方法读取的是一个字节,为什么返回是 int ,而不是 byte<br>因为字节输入流可以操作任意类型的文件,比如图片音频等,这些文件底层都是以二进制形式的存储的,如果每次读取都返回byte,有可能在读到中间的时候遇到 111111111 那么这 11111111 是 byte 类型的 -1,我们的程序是遇到 -1就会停止不读了,后面的数据就读不到了,所以在读取的时候用 int 类型接收,如果 11111111 会在其前面补上 24 个 0 凑足 4 个字节,那么 byte 类型的 -1 就变成 int 类型的 255 了这样可以保证整个数据读完,而结束标记的 -1 就是int类型</li>
+<li>bis.read() 返回的是下一个字节 (the next byte of data) ，而 bis.read(b) 返回的是读取的长度 (the buffer into which the data is read)，如果还没读到文件结尾，该长度就是数组长度</li>
+<li>fos.write(arr, 0, len); 不能替换为 fos.write(arr); 因为在最后一次 fis.read 读取时 len 不等于自定义字节数组的长度，就会导致文件末尾写入的数据错误，甚至文件损毁</li>
+<li>如果输入的缓冲区和输出的缓冲区不是同一个数组，那也最好保证设置数组长度一致，否则会影响性能。请开发者减少不必要的缓冲流滥用。</li>
+<li>byte[] arr = new byte[1024 <em> 8]; 自定义缓冲数组的大小，可以根据实际情况(大量碎片文件还是大文件传输等)调整，通常为1024 </em> 2的n次幂 </li>
+</ul>
+</div></article><div class="tags"></div><div class="paginator"><a href="/2016/12/11/BlockingQueue/" class="next"><span>下一页</span><i class="iconfont icon-right"></i></a></div><section id="comments"><div id="disqus_thread"></div></section><script type="text/javascript">var disqus_config = function () {
+    this.page.url = 'http://yoursite.com/2017/03/12/Buffered/';
+    this.page.identifier = '2017/03/12/Buffered/';
+    this.page.title = 'BufferedInput/OutputStream 缓冲流性能测试 [Java]';
+};
+(function() {
+var d = document, s = d.createElement('script');
+
+s.src = '//Your disqus ID.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();</script></section><footer><div class="social"><a href="https://github.com/gallonyin" title="github" class="iconfont icon-github"></a></div><div class="copyright"><p class="power">Powered by <a href="https://hexo.io/">Hexo</a> and Theme by <a href="https://github.com/ahonn/hexo-theme-even"> Even</a></p><p class="since">&copy;2016-2017<span class="heart"><i class="iconfont icon-heart"></i></span><span class="author">Gallon Yin</span></p></div><div id="back2top"><i class="iconfont icon-up"></i></div></footer></div><script src="/js/zepto.min.js"></script><script src="/js/theme.js"></script></body></html>
