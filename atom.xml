@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-03-14T14:08:40.056Z</updated>
+  <updated>2017-03-14T14:15:17.675Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://yoursite.com/2017/03/12/Buffered/"/>
     <id>http://yoursite.com/2017/03/12/Buffered/</id>
     <published>2017-03-12T13:15:00.000Z</published>
-    <updated>2017-03-14T14:08:40.056Z</updated>
+    <updated>2017-03-14T14:15:17.675Z</updated>
     
     <content type="html"><![CDATA[<p>首先，一次 IO 的代价是很高的，所以减少 IO 次数将会极大提升性能。提高文件读写性能，是每一位开发者都要考虑的，也是本文的核心目的，如果已经对 Java 中的 IO 流比较熟悉，可以直接拖到最后看结论。</p>
 <h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>IO 流用来处理设备之间的数据传输，Java 对数据的操作是通过流的方式，用于操作流的类都在 IO 包内，按流向分为输入流，输出流；按流操作分为字节流，字符流，其中字节流可以操作任何数据，因为在计算机中任何数据都是以字节的形式存储，字符流只能操作纯字符数据，比较方便。字节流的抽象父类：InputStream，OutputStream；字符流的抽象父类：Reader，Writer。</p>
@@ -37,7 +37,7 @@ fos.close();
 <pre><code>FileInputStream fis = new FileInputStream(&quot;source.rar&quot;);
 FileOutputStream fos = new FileOutputStream(&quot;copy.rar&quot;);
 int len;
-byte[] arr = new byte[1024 * 8];              //自定义字节数组
+byte[] arr = new byte[1024 * 8];               //自定义字节数组
 while((len = fis.read(arr)) != -1) {
     fos.write(arr, 0, len);                    //写出字节数组的有效字节个数
 }
@@ -45,8 +45,8 @@ fis.close();
 fos.close();
 </code></pre><p>Java 早已考虑到了 IO 性能问题，为了方便开发者，在 JDK1.0 IO 包下就有 BufferedInputStream 和 BufferedOutputStream 分别是 FilterInputStream 类和 FilterOutputStream 类的子类，实现了装饰设计模式。该流使用缓冲思想，内置一个缓冲区(数组)，BufferedInputStream 会一次从文件中读取 8192 个字节(默认构造)，存在缓冲区中，程序再次读取时直接从缓存区获取，避免访问磁盘；BufferedOutputStream 向流中写出文件也是先写到缓冲区中，直到缓冲区写满才一次性写到文件里。</p>
 <pre><code>FileInputStream fis = new FileInputStream(&quot;source.rar&quot;);    //创建文件输入流对象,关联source.rar
-BufferedInputStream bis = new BufferedInputStream(fis);       //创建缓冲区对fis装饰
-FileOutputStream fos = new FileOutputStream(&quot;copy.rar&quot;);     //创建输出流对象,关联copy.rar
+BufferedInputStream bis = new BufferedInputStream(fis);     //创建缓冲区对fis装饰
+FileOutputStream fos = new FileOutputStream(&quot;copy.rar&quot;);    //创建输出流对象,关联copy.rar
 BufferedOutputStream bos = new BufferedOutputStream(fos);   //创建缓冲区对fos装饰
 int b;
 while((b = bis.read()) != -1) {        
