@@ -102,116 +102,29 @@ while((len = bis.read(arr)) != -1) {
     <link href="http://gallonyin.github.io/2017/02/27/Python%20Base/"/>
     <id>http://gallonyin.github.io/2017/02/27/Python Base/</id>
     <published>2017-02-27T13:15:00.000Z</published>
-    <updated>2017-04-08T15:02:03.716Z</updated>
+    <updated>2017-04-08T15:16:05.482Z</updated>
     
-    <content type="html"><![CDATA[<h4 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h4><ol>
-<li><p>引用</p>
-<pre><code>a = &apos;ABC&apos;
-b = a
-a = &apos;XYZ&apos;
-print(b)
-\# &apos;ABC&apos;    b = a 使 b 指向的&apos;ABC&apos;地址，所以 b 没有被修改
-</code></pre></li>
-<li><p>转义</p>
-<pre><code>\t 表示一个制表符
-\\ 表示 \ 字符本身
-r&apos;...&apos; 表示不需要转义 但不能表示多行也不能表示包含&apos; 和 &apos;&apos; 的字符串(可用 r&apos;&apos;&apos;...&apos;&apos;&apos; 解决)
-</code></pre></li>
-<li><p>编码</p>
-<pre><code>如果中文字符串在 Python 环境下遇到 UnicodeDecodeError，这是因为 .py 文件保存的格式有问题。可以在第一行添加注释    
-解决方法为只要在文件开头加入 # -*- coding: UTF-8 -*- 或者 #coding=utf-8
-</code></pre></li>
-<li><p>计算</p>
-<pre><code>and or 均有短路计算(类似 Java 中 &amp;&amp; ||)
-因为Python把0、空字符串&apos;&apos;和None看成 False，其他数值和非空字符串都看成 True
-返回结果为计算终止项
-</code></pre></li>
-<li><p>集合</p>
-<pre><code>当索引数字为负数时，表示逆序读出 List 中的内容，记住 List 的最后一个空间的编号为 -1 开始
-
-单元素 tuple 时有歧义，Python 规定，单元素 tuple 要多加一个逗号 &quot;,&quot;，t = (1,)，多元素 tuple 最后加不加 &quot;,&quot; 结果一样
-
-1. 有序集合：list，tuple，str和unicode；
-2. 无序集合：set
-3. 无序集合并且具有 key-value 对：dict
-</code></pre></li>
-</ol>
-<ol>
-<li><p>网络</p>
-<pre><code>POST 请求下面必须加 {% csrf_token %} 否则403(安全) 
-跨站请求伪造（英语：Cross-site request forgery）
-</code></pre></li>
-<li><p>兼容 (Python 2 &amp; Python 3)</p>
-<pre><code>urllib2-Python 官方基础模块  requests - 强大第三方包
-Python 3.x中 urllib 库和 urilib2 库合并成了 urllib 库
-其中 urllib2.urlopen() 变成了 urllib.request.urlopen()
-urllib2.Request() 变成了 urllib.request.Request()
-</code></pre></li>
-</ol>
-<pre><code>原 urlparse 模块 -&gt; from urllib import parse / from urllib.parse import urlparse
-
-去除了 &lt;&gt;，全部改用 != 
-去除 ``，全部改用 repr() 
-关键词加入 as 和 with，还有 True, False, None 
-整型除法返回浮点数，要得到整型结果，请使用// 
-加入 nonlocal 语句，使用noclocal x 可以直接指派外围（非全局）变量 
-去除 print 语句，加入 print() 函数实现相同的功能。同样的还有 exec 语句，已经改为 exec() 函数 
-改变了顺序操作符的行为，例如 x &lt; y ，当 x 和 y 类型不匹配时抛出 TypeError  而不是返回随机布尔值 
-输入函数改变了，删除了 raw_input，用 input 代替
-去除元组参数解包。不能 def(a, (b, c)):pass 这样定义函数了 
-Python3 字符串只有 str 一种类型，但它跟 2.x版本的 unicode 几乎一样
-Python3 去除了 long 类型
-大量模块变动
-</code></pre><ol>
-<li><p>内建函数 BIF(built-in functions)</p>
-<pre><code>zip() 函数 可以把两个集合合并成一个集合
-zip([10,20,30], [&apos;a&apos;,&apos;b&apos;,&apos;c&apos;]) -&gt; [(10, &apos;a&apos;), (20, &apos;b&apos;), (30, &apos;c&apos;)]   
-</code></pre></li>
-<li><p>特殊方法(魔术方法)  </p>
-<pre><code>特殊方法定义在 class 中，不需要直接调用，某些函数或操作符会调用对应的特殊方法
-用于print的__str__(类似toString)  
-用于len的__len__
-用于cmp的__cmp__  (Py3中已经移除, 需要引入 operator 模块 operator.eq(a, b))
-直接调用实力对象 重写__call__
-__str__()用于显示给用户，而__repr__()用于显示给开发人员
-</code></pre></li>
-<li><p>三方模块管理工具<br>1.easy_install  2.pip 官方推荐,已内置到2.7.9</p>
-</li>
-<li><p>Exception</p>
-<pre><code>raise Exception(&quot;&quot;) (类似于 throw)
-</code></pre></li>
-<li><p>Database</p>
-<pre><code>Database API  
-https://www.python.org/dev/peps/pep-0249/ #官方接口规范 v2.0 
-访问数据库流程
-1.创建 connection 2.获取 cursor 3.执行命令/处理数据 4.关闭 cursor 5.关闭 connection
-connection 对象支持的方法 
-· cursor() # 使用该连接创建并返回游标
-· commit() # 提交当前事务
-· rollback() # 回滚当前事务
-· close() # 关闭连接
-事务: 访问和更新数据库的一个程序执行单元
-- 原子性：事务中包括的诸操作要么都做，要么都不做
-- 一致性：事务必须使数据库从一致性状态变到另一个一致性状态
-- 隔离性：一个事务的执行不能被其他事务干扰
-- 持久性：事务一旦提交，它对数据库的改变就是永久性的
-开发中使用事务
-· 关闭自动 commit: 设置 conn.autocommit(false) (mysql db 默认 false)
-· 正常结束事务: conn.commit()
-· 异常结束事务: conn.rollback()
-</code></pre></li>
-</ol>
-<h4 id="Hacks-小技巧"><a href="#Hacks-小技巧" class="headerlink" title="Hacks 小技巧"></a>Hacks 小技巧</h4><pre><code>int()函数可以把字符串转换为整数  默认按十进制 第二参数 base=&apos;10&apos;
-中偏函数 int2 = functools.partial(int, base=2) #调用按二进制
-</code></pre>]]></content>
+    <content type="html"><![CDATA[<h4 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h4><p>引用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">a = &apos;ABC&apos;</div><div class="line">b = a</div><div class="line">a = &apos;XYZ&apos;</div><div class="line">print(b)</div><div class="line">\# &apos;ABC&apos;    b = a 使 b 指向的&apos;ABC&apos;地址，所以 b 没有被修改</div></pre></td></tr></table></figure></p>
+<p>转义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">\t 表示一个制表符</div><div class="line">\\ 表示 \ 字符本身</div><div class="line">r&apos;...&apos; 表示不需要转义 但不能表示多行也不能表示包含&apos; 和 &apos;&apos; 的字符串(可用 r&apos;&apos;&apos;...&apos;&apos;&apos; 解决)</div></pre></td></tr></table></figure></p>
+<p>编码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">如果中文字符串在 Python 环境下遇到 UnicodeDecodeError，这是因为 .py 文件保存的格式有问题。可以在第一行添加注释    </div><div class="line">解决方法为只要在文件开头加入 # -*- coding: UTF-8 -*- 或者 #coding=utf-8</div></pre></td></tr></table></figure></p>
+<p>计算<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">and or 均有短路计算(类似 Java 中 &amp;&amp; ||)</div><div class="line">因为Python把0、空字符串&apos;&apos;和None看成 False，其他数值和非空字符串都看成 True</div><div class="line">返回结果为计算终止项</div></pre></td></tr></table></figure></p>
+<p>集合<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">当索引数字为负数时，表示逆序读出 List 中的内容，记住 List 的最后一个空间的编号为 -1 开始</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">单元素 tuple 时有歧义，Python 规定，单元素 tuple 要多加一个逗号 &quot;,&quot;，t = (1,)，多元素 tuple 最后加不加 &quot;,&quot; 结果一样</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1. 有序集合：list，tuple，str和unicode；</div><div class="line">2. 无序集合：set</div><div class="line">3. 无序集合并且具有 key-value 对：dict</div></pre></td></tr></table></figure>
+<p>网络<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">POST 请求下面必须加 &#123;% csrf_token %&#125; 否则403(安全) </div><div class="line">跨站请求伪造（英语：Cross-site request forgery）</div></pre></td></tr></table></figure></p>
+<p>兼容 (Python 2 &amp; Python 3)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">urllib2-Python 官方基础模块  requests - 强大第三方包</div><div class="line">Python 3.x中 urllib 库和 urilib2 库合并成了 urllib 库</div><div class="line">其中 urllib2.urlopen() 变成了 urllib.request.urlopen()</div><div class="line">urllib2.Request() 变成了 urllib.request.Request()</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">去除了 &lt;&gt;，全部改用 != </div><div class="line">去除 ``，全部改用 repr() </div><div class="line">关键词加入 as 和 with，还有 True, False, None </div><div class="line">整型除法返回浮点数，要得到整型结果，请使用// </div><div class="line">加入 nonlocal 语句，使用noclocal x 可以直接指派外围（非全局）变量 </div><div class="line">去除 print 语句，加入 print() 函数实现相同的功能。同样的还有 exec 语句，已经改为 exec() 函数 </div><div class="line">改变了顺序操作符的行为，例如 x &lt; y ，当 x 和 y 类型不匹配时抛出 TypeError  而不是返回随机布尔值 </div><div class="line">输入函数改变了，删除了 raw_input，用 input 代替</div><div class="line">去除元组参数解包。不能 def(a, (b, c)):pass 这样定义函数了 </div><div class="line">Python3 字符串只有 str 一种类型，但它跟 2.x版本的 unicode 几乎一样</div><div class="line">Python3 去除了 long 类型</div><div class="line">大量模块变动</div></pre></td></tr></table></figure>
+<p>内建函数 BIF(built-in functions)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">zip() 函数 可以把两个集合合并成一个集合</div><div class="line">zip([10,20,30], [&apos;a&apos;,&apos;b&apos;,&apos;c&apos;]) -&gt; [(10, &apos;a&apos;), (20, &apos;b&apos;), (30, &apos;c&apos;)]</div></pre></td></tr></table></figure></p>
+<p>特殊方法(魔术方法)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">特殊方法定义在 class 中，不需要直接调用，某些函数或操作符会调用对应的特殊方法</div><div class="line">用于print的__str__(类似toString)  </div><div class="line">用于len的__len__</div><div class="line">用于cmp的__cmp__  (Py3中已经移除, 需要引入 operator 模块 operator.eq(a, b))</div><div class="line">直接调用实力对象 重写__call__</div><div class="line">__str__()用于显示给用户，而__repr__()用于显示给开发人员</div></pre></td></tr></table></figure></p>
+<p>三方模块管理工具<br>    1.easy_install  2.pip 官方推荐,已内置到2.7.9</p>
+<p>Exception<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">raise Exception(&quot;&quot;) (类似于 throw)</div></pre></td></tr></table></figure></p>
+<p>Database<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">Database API  </div><div class="line">https://www.python.org/dev/peps/pep-0249/ #官方接口规范 v2.0 </div><div class="line">访问数据库流程</div><div class="line">1.创建 connection 2.获取 cursor 3.执行命令/处理数据 4.关闭 cursor 5.关闭 connection</div><div class="line">connection 对象支持的方法 </div><div class="line">· cursor() # 使用该连接创建并返回游标</div><div class="line">· commit() # 提交当前事务</div><div class="line">· rollback() # 回滚当前事务</div><div class="line">· close() # 关闭连接</div><div class="line">事务: 访问和更新数据库的一个程序执行单元</div><div class="line">- 原子性：事务中包括的诸操作要么都做，要么都不做</div><div class="line">- 一致性：事务必须使数据库从一致性状态变到另一个一致性状态</div><div class="line">- 隔离性：一个事务的执行不能被其他事务干扰</div><div class="line">- 持久性：事务一旦提交，它对数据库的改变就是永久性的</div><div class="line">开发中使用事务</div><div class="line">· 关闭自动 commit: 设置 conn.autocommit(false) (mysql db 默认 false)</div><div class="line">· 正常结束事务: conn.commit()</div><div class="line">· 异常结束事务: conn.rollback()</div></pre></td></tr></table></figure></p>
+<h4 id="Hacks-小技巧"><a href="#Hacks-小技巧" class="headerlink" title="Hacks 小技巧"></a>Hacks 小技巧</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">int()函数可以把字符串转换为整数  默认按十进制 第二参数 base=&apos;10&apos;</div><div class="line">中偏函数 int2 = functools.partial(int, base=2) #调用按二进制</div></pre></td></tr></table></figure>
+]]></content>
     
     <summary type="html">
     
-      &lt;h4 id=&quot;基础知识&quot;&gt;&lt;a href=&quot;#基础知识&quot; class=&quot;headerlink&quot; title=&quot;基础知识&quot;&gt;&lt;/a&gt;基础知识&lt;/h4&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;引用&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;a = &amp;apos;ABC&amp;apos;
-b = a
-a = &amp;apos
+      &lt;h4 id=&quot;基础知识&quot;&gt;&lt;a href=&quot;#基础知识&quot; class=&quot;headerlink&quot; title=&quot;基础知识&quot;&gt;&lt;/a&gt;基础知识&lt;/h4&gt;&lt;p&gt;引用&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gu
     
     </summary>
     
