@@ -102,9 +102,10 @@ while((len = bis.read(arr)) != -1) {
     <link href="http://gallonyin.github.io/2017/02/27/Python%20Base/"/>
     <id>http://gallonyin.github.io/2017/02/27/Python Base/</id>
     <published>2017-02-27T13:15:00.000Z</published>
-    <updated>2017-04-08T15:16:05.482Z</updated>
+    <updated>2017-04-08T15:17:54.527Z</updated>
     
-    <content type="html"><![CDATA[<h4 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h4><p>引用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">a = &apos;ABC&apos;</div><div class="line">b = a</div><div class="line">a = &apos;XYZ&apos;</div><div class="line">print(b)</div><div class="line">\# &apos;ABC&apos;    b = a 使 b 指向的&apos;ABC&apos;地址，所以 b 没有被修改</div></pre></td></tr></table></figure></p>
+    <content type="html"><![CDATA[<a id="more"></a>
+<h4 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h4><p>引用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">a = &apos;ABC&apos;</div><div class="line">b = a</div><div class="line">a = &apos;XYZ&apos;</div><div class="line">print(b)</div><div class="line">\# &apos;ABC&apos;    b = a 使 b 指向的&apos;ABC&apos;地址，所以 b 没有被修改</div></pre></td></tr></table></figure></p>
 <p>转义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">\t 表示一个制表符</div><div class="line">\\ 表示 \ 字符本身</div><div class="line">r&apos;...&apos; 表示不需要转义 但不能表示多行也不能表示包含&apos; 和 &apos;&apos; 的字符串(可用 r&apos;&apos;&apos;...&apos;&apos;&apos; 解决)</div></pre></td></tr></table></figure></p>
 <p>编码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">如果中文字符串在 Python 环境下遇到 UnicodeDecodeError，这是因为 .py 文件保存的格式有问题。可以在第一行添加注释    </div><div class="line">解决方法为只要在文件开头加入 # -*- coding: UTF-8 -*- 或者 #coding=utf-8</div></pre></td></tr></table></figure></p>
 <p>计算<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">and or 均有短路计算(类似 Java 中 &amp;&amp; ||)</div><div class="line">因为Python把0、空字符串&apos;&apos;和None看成 False，其他数值和非空字符串都看成 True</div><div class="line">返回结果为计算终止项</div></pre></td></tr></table></figure></p>
@@ -124,7 +125,8 @@ while((len = bis.read(arr)) != -1) {
     
     <summary type="html">
     
-      &lt;h4 id=&quot;基础知识&quot;&gt;&lt;a href=&quot;#基础知识&quot; class=&quot;headerlink&quot; title=&quot;基础知识&quot;&gt;&lt;/a&gt;基础知识&lt;/h4&gt;&lt;p&gt;引用&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gu
+      &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h4 id=&quot;基础知识&quot;&gt;&lt;a href=&quot;#基础知识&quot; class=&quot;headerlink&quot; title=&quot;基础知识&quot;&gt;&lt;/a&gt;基础知识&lt;/h4&gt;&lt;p&gt;引用&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table
     
     </summary>
     
