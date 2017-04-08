@@ -98,13 +98,134 @@ while((len = bis.read(arr)) != -1) {
   </entry>
   
   <entry>
+    <title>Python 中那些知识点 [持续更新] [Python]</title>
+    <link href="http://gallonyin.github.io/2017/02/27/Python%20Base/"/>
+    <id>http://gallonyin.github.io/2017/02/27/Python Base/</id>
+    <published>2017-02-27T13:15:00.000Z</published>
+    <updated>2017-04-08T15:02:03.716Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h4><ol>
+<li><p>引用</p>
+<pre><code>a = &apos;ABC&apos;
+b = a
+a = &apos;XYZ&apos;
+print(b)
+\# &apos;ABC&apos;    b = a 使 b 指向的&apos;ABC&apos;地址，所以 b 没有被修改
+</code></pre></li>
+<li><p>转义</p>
+<pre><code>\t 表示一个制表符
+\\ 表示 \ 字符本身
+r&apos;...&apos; 表示不需要转义 但不能表示多行也不能表示包含&apos; 和 &apos;&apos; 的字符串(可用 r&apos;&apos;&apos;...&apos;&apos;&apos; 解决)
+</code></pre></li>
+<li><p>编码</p>
+<pre><code>如果中文字符串在 Python 环境下遇到 UnicodeDecodeError，这是因为 .py 文件保存的格式有问题。可以在第一行添加注释    
+解决方法为只要在文件开头加入 # -*- coding: UTF-8 -*- 或者 #coding=utf-8
+</code></pre></li>
+<li><p>计算</p>
+<pre><code>and or 均有短路计算(类似 Java 中 &amp;&amp; ||)
+因为Python把0、空字符串&apos;&apos;和None看成 False，其他数值和非空字符串都看成 True
+返回结果为计算终止项
+</code></pre></li>
+<li><p>集合</p>
+<pre><code>当索引数字为负数时，表示逆序读出 List 中的内容，记住 List 的最后一个空间的编号为 -1 开始
+
+单元素 tuple 时有歧义，Python 规定，单元素 tuple 要多加一个逗号 &quot;,&quot;，t = (1,)，多元素 tuple 最后加不加 &quot;,&quot; 结果一样
+
+1. 有序集合：list，tuple，str和unicode；
+2. 无序集合：set
+3. 无序集合并且具有 key-value 对：dict
+</code></pre></li>
+</ol>
+<ol>
+<li><p>网络</p>
+<pre><code>POST 请求下面必须加 {% csrf_token %} 否则403(安全) 
+跨站请求伪造（英语：Cross-site request forgery）
+</code></pre></li>
+<li><p>兼容 (Python 2 &amp; Python 3)</p>
+<pre><code>urllib2-Python 官方基础模块  requests - 强大第三方包
+Python 3.x中 urllib 库和 urilib2 库合并成了 urllib 库
+其中 urllib2.urlopen() 变成了 urllib.request.urlopen()
+urllib2.Request() 变成了 urllib.request.Request()
+</code></pre></li>
+</ol>
+<pre><code>原 urlparse 模块 -&gt; from urllib import parse / from urllib.parse import urlparse
+
+去除了 &lt;&gt;，全部改用 != 
+去除 ``，全部改用 repr() 
+关键词加入 as 和 with，还有 True, False, None 
+整型除法返回浮点数，要得到整型结果，请使用// 
+加入 nonlocal 语句，使用noclocal x 可以直接指派外围（非全局）变量 
+去除 print 语句，加入 print() 函数实现相同的功能。同样的还有 exec 语句，已经改为 exec() 函数 
+改变了顺序操作符的行为，例如 x &lt; y ，当 x 和 y 类型不匹配时抛出 TypeError  而不是返回随机布尔值 
+输入函数改变了，删除了 raw_input，用 input 代替
+去除元组参数解包。不能 def(a, (b, c)):pass 这样定义函数了 
+Python3 字符串只有 str 一种类型，但它跟 2.x版本的 unicode 几乎一样
+Python3 去除了 long 类型
+大量模块变动
+</code></pre><ol>
+<li><p>内建函数 BIF(built-in functions)</p>
+<pre><code>zip() 函数 可以把两个集合合并成一个集合
+zip([10,20,30], [&apos;a&apos;,&apos;b&apos;,&apos;c&apos;]) -&gt; [(10, &apos;a&apos;), (20, &apos;b&apos;), (30, &apos;c&apos;)]   
+</code></pre></li>
+<li><p>特殊方法(魔术方法)  </p>
+<pre><code>特殊方法定义在 class 中，不需要直接调用，某些函数或操作符会调用对应的特殊方法
+用于print的__str__(类似toString)  
+用于len的__len__
+用于cmp的__cmp__  (Py3中已经移除, 需要引入 operator 模块 operator.eq(a, b))
+直接调用实力对象 重写__call__
+__str__()用于显示给用户，而__repr__()用于显示给开发人员
+</code></pre></li>
+<li><p>三方模块管理工具<br>1.easy_install  2.pip 官方推荐,已内置到2.7.9</p>
+</li>
+<li><p>Exception</p>
+<pre><code>raise Exception(&quot;&quot;) (类似于 throw)
+</code></pre></li>
+<li><p>Database</p>
+<pre><code>Database API  
+https://www.python.org/dev/peps/pep-0249/ #官方接口规范 v2.0 
+访问数据库流程
+1.创建 connection 2.获取 cursor 3.执行命令/处理数据 4.关闭 cursor 5.关闭 connection
+connection 对象支持的方法 
+· cursor() # 使用该连接创建并返回游标
+· commit() # 提交当前事务
+· rollback() # 回滚当前事务
+· close() # 关闭连接
+事务: 访问和更新数据库的一个程序执行单元
+- 原子性：事务中包括的诸操作要么都做，要么都不做
+- 一致性：事务必须使数据库从一致性状态变到另一个一致性状态
+- 隔离性：一个事务的执行不能被其他事务干扰
+- 持久性：事务一旦提交，它对数据库的改变就是永久性的
+开发中使用事务
+· 关闭自动 commit: 设置 conn.autocommit(false) (mysql db 默认 false)
+· 正常结束事务: conn.commit()
+· 异常结束事务: conn.rollback()
+</code></pre></li>
+</ol>
+<h4 id="Hacks-小技巧"><a href="#Hacks-小技巧" class="headerlink" title="Hacks 小技巧"></a>Hacks 小技巧</h4><pre><code>int()函数可以把字符串转换为整数  默认按十进制 第二参数 base=&apos;10&apos;
+中偏函数 int2 = functools.partial(int, base=2) #调用按二进制
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;基础知识&quot;&gt;&lt;a href=&quot;#基础知识&quot; class=&quot;headerlink&quot; title=&quot;基础知识&quot;&gt;&lt;/a&gt;基础知识&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;引用&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;a = &amp;apos;ABC&amp;apos;
+b = a
+a = &amp;apos
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>阻塞式队列的实现原理 BlockingQueue [Java]</title>
     <link href="http://gallonyin.github.io/2016/12/11/BlockingQueue/"/>
     <id>http://gallonyin.github.io/2016/12/11/BlockingQueue/</id>
     <published>2016-12-11T13:15:00.000Z</published>
-    <updated>2016-12-13T14:33:42.760Z</updated>
+    <updated>2017-04-08T10:43:09.936Z</updated>
     
-    <content type="html"><![CDATA[<h4 id="阻塞式队列的实现方式"><a href="#阻塞式队列的实现方式" class="headerlink" title="阻塞式队列的实现方式"></a>阻塞式队列的实现方式</h4><p>首先，阻塞队列 ( BlockingQueue )是 Java util.concurrent 包下重要的数据结构。当阻塞队列进行插入数据时，如果队列已满，线程将会阻塞等待直到队列非满；从阻塞队列取数据时，如果队列已空，线程将会阻塞等待直到队列非空。本文与 java 官方的阻塞式队列不同，自己以另一种方式(线程 wait / notifyAll )实现(原理相似)，本案 demo 遵循 FIFO (先进先出)原则，只写出了 put (阻塞)/ take (阻塞)方法，官方实现还含有 add / remove (失败抛出异常)、offer / poll (失败时返回值不同)、offer / poll (重载 增加 timeout 阻塞时间限制，并返回值是否成功)在这里都没有写出。除此之外 lock / condition 方式实现也附在文中最下方以供对比。本案 demo 使用 Android UI 但是只需懂得 java 基本语法，不会影响理解。<br><a id="more"></a></p>
+    <content type="html"><![CDATA[<h4 id="阻塞式队列的实现方式"><a href="#阻塞式队列的实现方式" class="headerlink" title="阻塞式队列的实现方式"></a>阻塞式队列的实现方式</h4><p>首先，阻塞队列( BlockingQueue )是 Java util.concurrent 包下重要的数据结构。当阻塞队列进行插入数据时，如果队列已满，线程将会阻塞等待直到队列非满；从阻塞队列取数据时，如果队列已空，线程将会阻塞等待直到队列非空。本文与 java 官方的阻塞式队列不同，自己以另一种方式(线程 wait / notifyAll )实现(原理相似)，本案 demo 遵循 FIFO (先进先出)原则，只写出了 put (阻塞)/ take (阻塞)方法，官方实现还含有 add / remove (失败抛出异常)、offer / poll (失败时返回值不同)、offer / poll (重载 增加 timeout 阻塞时间限制，并返回值是否成功)在这里都没有写出。除此之外 lock / condition 方式实现也附在文中最下方以供对比。本案 demo 使用 Android UI 但是只需懂得 java 基本语法，不会影响理解。<br><a id="more"></a></p>
 <h4 id="相关应用-生产者消费者模式"><a href="#相关应用-生产者消费者模式" class="headerlink" title="相关应用:生产者消费者模式"></a>相关应用:生产者消费者模式</h4><p>为能够解决绝大多数并发问题，该模式通过平衡生产线程和消费线程的工作能力来提高程序的整体处理数据的速度。当然，这不是这次要讲的重点，如果有兴趣可以去了解阻塞式队列处理高并发问题。</p>
 <h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4><p>在等待 Condition 时，允许发生“虚假唤醒”，这通常作为对基础平台语义的让步。对于大多数应用程序，这带来的实际影响很小，因为 Condition  应该总是在一个循环中被等待，并测试正被等待的状态声明。某个实现可以随意移除可能的虚假唤醒，但建议应用程序程序员总是假定这些虚假唤醒可能发生，因此总是在一个循环中(如 while )等待。<br>三种形式的条件等待（可中断、不可中断和超时）在一些平台上的实现以及它们的性能特征可能会有所不同。尤其是它可能很难提供这些特性和维护特定语义，比如排序保证。更进一步地说，中断线程实际挂起的能力在所有平台上并不是总是可行的。因此，并不要求某个实现为所有三种形式的等待定义完全相同的保证或语义，也不要求其支持中断线程的实际挂起。要求实现清楚地记录每个等待方法提供的语义和保证，在某个实现不支持中断线程的挂起时，它必须遵从此接口中定义的中断语义。由于中断通常意味着取消，而又通常很少进行中断检查，因此实现可以先于普通方法的返回来对中断进行响应。即使出现在另一个操作后的中断可能会释放线程锁时也是如此。实现应记录此行为。 </p>
 <p>demo 代码如下:</p>
@@ -235,72 +356,13 @@ public class QueueActivity extends AppCompatActivity implements View.OnClickList
 12-11 21:10:07.265 18459-18855/com.example.test.test E/QueueActivity: putSleepCount: 0
 12-11 21:10:07.265 18459-19469/com.example.test.test E/QueueActivity: take: 0
 从中可以看出 在达到 limit 值后 put 操作会被阻塞，而之后的 take 操作会唤醒所有的阻塞线程再次判断并加入队列
-</code></pre><p>附：<br>使用 lock / condition 实现部分代码如下(JDK 1.7 ArrayBlockingQueue)：</p>
-<pre><code>//构造方法
-public ArrayBlockingQueue(int capacity, boolean fair) {
-        if (capacity &lt;= 0)
-            throw new IllegalArgumentException();
-        //创建数组    
-        this.items = new Object[capacity];
-        //创建锁和阻塞条件
-        lock = new ReentrantLock(fair);   
-        notEmpty = lock.newCondition();
-        notFull =  lock.newCondition();
-    }
-//添加元素的方法
-public void put(E e) throws InterruptedException {
-        checkNotNull(e);
-        final ReentrantLock lock = this.lock;
-        lock.lockInterruptibly();
-        try {
-            while (count == items.length)
-                notFull.await();
-            //如果队列不满就入队
-            enqueue(e);
-        } finally {
-            lock.unlock();
-        }
-    }
- //入队的方法
- private void enqueue(E x) {
-        final Object[] items = this.items;
-        items[putIndex] = x;
-        if (++putIndex == items.length)
-            putIndex = 0;
-        count++;
-        notEmpty.signal();
-    }
- //移除元素的方法
- public E take() throws InterruptedException {
-        final ReentrantLock lock = this.lock;
-        lock.lockInterruptibly();
-        try {
-            while (count == 0)
-                notEmpty.await();
-            return dequeue();
-        } finally {
-            lock.unlock();
-        }
-    }
- //出队的方法
- private E dequeue() {
-        final Object[] items = this.items;
-        @SuppressWarnings(&quot;unchecked&quot;)
-        E x = (E) items[takeIndex];
-        items[takeIndex] = null;
-        if (++takeIndex == items.length)
-            takeIndex = 0;
-        count--;
-        if (itrs != null)
-            itrs.elementDequeued();
-        notFull.signal();
-        return x;
-</code></pre><p>这样做的优点是调用 notEmpty.signalAll()只会唤醒  notEmpty.await()下的线程，notFull 同理，但是通常不可能同时存在两种条件(入队和出队同时)阻塞。在 Condition 中，用 await()替换 wait()，用 signal()替换 notify()，用 signalAll()替换 notifyAll()，这里注意，Condition 是被绑定到 Lock 上的，要创建一个 Lock 的 Condition 必须用 newCondition()方法。<br>当然本文并不是为了比较两种实现方法的优劣，而且只要理解第一种就很容易理解第二种，本文只是通过 demo 让大家理解阻塞式队列的原理从而知道为什么使用它，或能对阻塞式队列多一点了解。</p>
+</code></pre><p>附：<br>使用 lock / condition 实现部分代码如下(JDK 1.7 ArrayBlockingQueue)：<br>​<br>    //构造方法<br>    public ArrayBlockingQueue(int capacity, boolean fair) {<br>            if (capacity &lt;= 0)<br>                throw new IllegalArgumentException();<br>            //创建数组<br>            this.items = new Object[capacity];<br>            //创建锁和阻塞条件<br>            lock = new ReentrantLock(fair);<br>            notEmpty = lock.newCondition();<br>            notFull =  lock.newCondition();<br>        }<br>    //添加元素的方法<br>    public void put(E e) throws InterruptedException {<br>            checkNotNull(e);<br>            final ReentrantLock lock = this.lock;<br>            lock.lockInterruptibly();<br>            try {<br>                while (count == items.length)<br>                    notFull.await();<br>                //如果队列不满就入队<br>                enqueue(e);<br>            } finally {<br>                lock.unlock();<br>            }<br>        }<br>     //入队的方法<br>     private void enqueue(E x) {<br>            final Object[] items = this.items;<br>            items[putIndex] = x;<br>            if (++putIndex == items.length)<br>                putIndex = 0;<br>            count++;<br>            notEmpty.signal();<br>        }<br>     //移除元素的方法<br>     public E take() throws InterruptedException {<br>            final ReentrantLock lock = this.lock;<br>            lock.lockInterruptibly();<br>            try {<br>                while (count == 0)<br>                    notEmpty.await();<br>                return dequeue();<br>            } finally {<br>                lock.unlock();<br>            }<br>        }<br>     //出队的方法<br>     private E dequeue() {<br>            final Object[] items = this.items;<br>            @SuppressWarnings(“unchecked”)<br>            E x = (E) items[takeIndex];<br>            items[takeIndex] = null;<br>            if (++takeIndex == items.length)<br>                takeIndex = 0;<br>            count–;<br>            if (itrs != null)<br>                itrs.elementDequeued();<br>            notFull.signal();<br>            return x;</p>
+<p>这样做的优点是调用 notEmpty.signalAll()只会唤醒  notEmpty.await()下的线程，notFull 同理，但是通常不可能同时存在两种条件(入队和出队同时)阻塞。在 Condition 中，用 await()替换 wait()，用 signal()替换 notify()，用 signalAll()替换 notifyAll()，这里注意，Condition 是被绑定到 Lock 上的，要创建一个 Lock 的 Condition 必须用 newCondition()方法。<br>当然本文并不是为了比较两种实现方法的优劣，而且只要理解第一种就很容易理解第二种，本文只是通过 demo 让大家理解阻塞式队列的原理从而知道为什么使用它，或能对阻塞式队列多一点了解。</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h4 id=&quot;阻塞式队列的实现方式&quot;&gt;&lt;a href=&quot;#阻塞式队列的实现方式&quot; class=&quot;headerlink&quot; title=&quot;阻塞式队列的实现方式&quot;&gt;&lt;/a&gt;阻塞式队列的实现方式&lt;/h4&gt;&lt;p&gt;首先，阻塞队列 ( BlockingQueue )是 Java util.concurrent 包下重要的数据结构。当阻塞队列进行插入数据时，如果队列已满，线程将会阻塞等待直到队列非满；从阻塞队列取数据时，如果队列已空，线程将会阻塞等待直到队列非空。本文与 java 官方的阻塞式队列不同，自己以另一种方式(线程 wait / notifyAll )实现(原理相似)，本案 demo 遵循 FIFO (先进先出)原则，只写出了 put (阻塞)/ take (阻塞)方法，官方实现还含有 add / remove (失败抛出异常)、offer / poll (失败时返回值不同)、offer / poll (重载 增加 timeout 阻塞时间限制，并返回值是否成功)在这里都没有写出。除此之外 lock / condition 方式实现也附在文中最下方以供对比。本案 demo 使用 Android UI 但是只需懂得 java 基本语法，不会影响理解。&lt;br&gt;
+      &lt;h4 id=&quot;阻塞式队列的实现方式&quot;&gt;&lt;a href=&quot;#阻塞式队列的实现方式&quot; class=&quot;headerlink&quot; title=&quot;阻塞式队列的实现方式&quot;&gt;&lt;/a&gt;阻塞式队列的实现方式&lt;/h4&gt;&lt;p&gt;首先，阻塞队列( BlockingQueue )是 Java util.concurrent 包下重要的数据结构。当阻塞队列进行插入数据时，如果队列已满，线程将会阻塞等待直到队列非满；从阻塞队列取数据时，如果队列已空，线程将会阻塞等待直到队列非空。本文与 java 官方的阻塞式队列不同，自己以另一种方式(线程 wait / notifyAll )实现(原理相似)，本案 demo 遵循 FIFO (先进先出)原则，只写出了 put (阻塞)/ take (阻塞)方法，官方实现还含有 add / remove (失败抛出异常)、offer / poll (失败时返回值不同)、offer / poll (重载 增加 timeout 阻塞时间限制，并返回值是否成功)在这里都没有写出。除此之外 lock / condition 方式实现也附在文中最下方以供对比。本案 demo 使用 Android UI 但是只需懂得 java 基本语法，不会影响理解。&lt;br&gt;
     
     </summary>
     
