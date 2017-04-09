@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://gallonyin.github.io/"/>
-  <updated>2017-04-09T10:39:28.614Z</updated>
+  <updated>2017-04-09T10:51:36.521Z</updated>
   <id>http://gallonyin.github.io/</id>
   
   <author>
@@ -20,12 +20,12 @@
     <link href="http://gallonyin.github.io/2017/04/09/Android%20Study/"/>
     <id>http://gallonyin.github.io/2017/04/09/Android Study/</id>
     <published>2017-04-09T10:01:00.000Z</published>
-    <updated>2017-04-09T10:39:28.614Z</updated>
+    <updated>2017-04-09T10:51:36.521Z</updated>
     
     <content type="html"><![CDATA[<h4 id="写在前头"><a href="#写在前头" class="headerlink" title="写在前头"></a>写在前头</h4><p>从 0 开始 Android 之路，你如何不断进步？一年半 Android 的小白的自省，因为我最近有可能转做 Java 了所以，回过头看，把自己的经验记录下来，供自己回忆和旁人参考。</p>
 <a id="more"></a>
 <h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><ul>
-<li><p><strong>一定要会用「 Google 」而不仅是「 百度 」。</strong> </p>
+<li><p><strong>一定要会用「 Google 」而不仅是「 百度 」。</strong>  </p>
 <p>常见第一个现象就是一个问题百度搜出来的结果都是千篇一律，转载还算好的，(侵权)抄袭很严重，而且很多知识点根本都没有实践，常常会误导，我如果写博客，自己写的东西一定是自己反复实践过的，把这些宝贵的经验总结出来对后来人有一点帮助，就够了。第二个现象是，百度搜索的结果第一屏总是全是广告，而且，比较隐蔽，体验极差，太多招黑的事情这里就不多描述了。</p>
 <p>总之，对于做技术的我来说，就像知名博主 stormzhang 所说的，“ Google + Stackoverflow + GitHub 就再也没有解决不了的问题了，而某种意义上，开发其实主要就是解决问题的能力！”。如果你刚想尝试，发现用不了 Google 搜索，那么你需要学会一件事：用「 百度 」帮助你去学会怎么使用「 Google 」，就像新的 windows 系统，第一件事总是用「 IE 」去下载新的浏览器。</p>
 </li>
@@ -56,8 +56,8 @@
     
     </summary>
     
+      <category term="成长" scheme="http://gallonyin.github.io/categories/%E6%88%90%E9%95%BF/"/>
     
-      <category term="成长" scheme="http://gallonyin.github.io/tags/%E6%88%90%E9%95%BF/"/>
     
   </entry>
   
@@ -66,7 +66,7 @@
     <link href="http://gallonyin.github.io/2017/03/12/Buffered/"/>
     <id>http://gallonyin.github.io/2017/03/12/Buffered/</id>
     <published>2017-03-12T13:15:00.000Z</published>
-    <updated>2017-03-14T14:38:03.840Z</updated>
+    <updated>2017-04-09T10:47:28.797Z</updated>
     
     <content type="html"><![CDATA[<p>首先，一次 IO 的代价是很高的，所以减少 IO 次数将会极大提升性能。提高文件读写性能，是每一位开发者都要考虑的，也是本文的核心目的，如果已经对 Java 中的 IO 流比较熟悉，可以直接拖到最后看结论。</p>
 <h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>IO 流用来处理设备之间的数据传输，Java 对数据的操作是通过流的方式，用于操作流的类都在 IO 包内，按流向分为输入流，输出流；按流操作分为字节流，字符流，其中字节流可以操作任何数据，因为在计算机中任何数据都是以字节的形式存储，字符流只能操作纯字符数据，比较方便。字节流的抽象父类：InputStream，OutputStream；字符流的抽象父类：Reader，Writer。</p>
@@ -140,6 +140,8 @@ while((len = bis.read(arr)) != -1) {
     
     </summary>
     
+      <category term="技术" scheme="http://gallonyin.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
     
   </entry>
   
@@ -148,7 +150,7 @@ while((len = bis.read(arr)) != -1) {
     <link href="http://gallonyin.github.io/2017/02/27/Python%20Base/"/>
     <id>http://gallonyin.github.io/2017/02/27/Python Base/</id>
     <published>2017-02-27T13:15:00.000Z</published>
-    <updated>2017-04-08T15:35:53.611Z</updated>
+    <updated>2017-04-09T10:47:43.481Z</updated>
     
     <content type="html"><![CDATA[<p>本文是我在自学 Python 3.5 中遇到的一些知识梳理和一些技巧分享，Python 在简洁性、易读性以及可扩展性上优势明显，使用率呈线性增长，如果你想去学习一门新的设计语言或是开开眼界，那么我非常推荐你这个优美的能写出乐趣的语言 Python<br><a id="more"></a></p>
 <h4 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h4><p>引用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">a = &apos;ABC&apos;</div><div class="line">b = a</div><div class="line">a = &apos;XYZ&apos;</div><div class="line">print(b)</div><div class="line">\# &apos;ABC&apos;    b = a 使 b 指向的&apos;ABC&apos;地址，所以 b 没有被修改</div></pre></td></tr></table></figure></p>
@@ -175,6 +177,8 @@ while((len = bis.read(arr)) != -1) {
     
     </summary>
     
+      <category term="技术" scheme="http://gallonyin.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
     
   </entry>
   
@@ -183,7 +187,7 @@ while((len = bis.read(arr)) != -1) {
     <link href="http://gallonyin.github.io/2016/12/11/BlockingQueue/"/>
     <id>http://gallonyin.github.io/2016/12/11/BlockingQueue/</id>
     <published>2016-12-11T13:15:00.000Z</published>
-    <updated>2017-04-08T10:43:09.936Z</updated>
+    <updated>2017-04-09T10:47:35.460Z</updated>
     
     <content type="html"><![CDATA[<h4 id="阻塞式队列的实现方式"><a href="#阻塞式队列的实现方式" class="headerlink" title="阻塞式队列的实现方式"></a>阻塞式队列的实现方式</h4><p>首先，阻塞队列( BlockingQueue )是 Java util.concurrent 包下重要的数据结构。当阻塞队列进行插入数据时，如果队列已满，线程将会阻塞等待直到队列非满；从阻塞队列取数据时，如果队列已空，线程将会阻塞等待直到队列非空。本文与 java 官方的阻塞式队列不同，自己以另一种方式(线程 wait / notifyAll )实现(原理相似)，本案 demo 遵循 FIFO (先进先出)原则，只写出了 put (阻塞)/ take (阻塞)方法，官方实现还含有 add / remove (失败抛出异常)、offer / poll (失败时返回值不同)、offer / poll (重载 增加 timeout 阻塞时间限制，并返回值是否成功)在这里都没有写出。除此之外 lock / condition 方式实现也附在文中最下方以供对比。本案 demo 使用 Android UI 但是只需懂得 java 基本语法，不会影响理解。<br><a id="more"></a></p>
 <h4 id="相关应用-生产者消费者模式"><a href="#相关应用-生产者消费者模式" class="headerlink" title="相关应用:生产者消费者模式"></a>相关应用:生产者消费者模式</h4><p>为能够解决绝大多数并发问题，该模式通过平衡生产线程和消费线程的工作能力来提高程序的整体处理数据的速度。当然，这不是这次要讲的重点，如果有兴趣可以去了解阻塞式队列处理高并发问题。</p>
@@ -325,6 +329,8 @@ public class QueueActivity extends AppCompatActivity implements View.OnClickList
       &lt;h4 id=&quot;阻塞式队列的实现方式&quot;&gt;&lt;a href=&quot;#阻塞式队列的实现方式&quot; class=&quot;headerlink&quot; title=&quot;阻塞式队列的实现方式&quot;&gt;&lt;/a&gt;阻塞式队列的实现方式&lt;/h4&gt;&lt;p&gt;首先，阻塞队列( BlockingQueue )是 Java util.concurrent 包下重要的数据结构。当阻塞队列进行插入数据时，如果队列已满，线程将会阻塞等待直到队列非满；从阻塞队列取数据时，如果队列已空，线程将会阻塞等待直到队列非空。本文与 java 官方的阻塞式队列不同，自己以另一种方式(线程 wait / notifyAll )实现(原理相似)，本案 demo 遵循 FIFO (先进先出)原则，只写出了 put (阻塞)/ take (阻塞)方法，官方实现还含有 add / remove (失败抛出异常)、offer / poll (失败时返回值不同)、offer / poll (重载 增加 timeout 阻塞时间限制，并返回值是否成功)在这里都没有写出。除此之外 lock / condition 方式实现也附在文中最下方以供对比。本案 demo 使用 Android UI 但是只需懂得 java 基本语法，不会影响理解。&lt;br&gt;
     
     </summary>
+    
+      <category term="技术" scheme="http://gallonyin.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
     
     
   </entry>
