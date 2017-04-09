@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://gallonyin.github.io/"/>
-  <updated>2017-04-09T10:51:36.521Z</updated>
+  <updated>2017-04-09T11:06:04.775Z</updated>
   <id>http://gallonyin.github.io/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Andoird 修炼手册</title>
+    <title>Android 修炼手册</title>
     <link href="http://gallonyin.github.io/2017/04/09/Android%20Study/"/>
     <id>http://gallonyin.github.io/2017/04/09/Android Study/</id>
     <published>2017-04-09T10:01:00.000Z</published>
-    <updated>2017-04-09T10:51:36.521Z</updated>
+    <updated>2017-04-09T11:06:04.775Z</updated>
     
     <content type="html"><![CDATA[<h4 id="写在前头"><a href="#写在前头" class="headerlink" title="写在前头"></a>写在前头</h4><p>从 0 开始 Android 之路，你如何不断进步？一年半 Android 的小白的自省，因为我最近有可能转做 Java 了所以，回过头看，把自己的经验记录下来，供自己回忆和旁人参考。</p>
 <a id="more"></a>
