@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://gallonyin.github.io/"/>
-  <updated>2017-04-09T11:16:18.585Z</updated>
+  <updated>2017-04-09T11:19:38.353Z</updated>
   <id>http://gallonyin.github.io/</id>
   
   <author>
@@ -20,12 +20,12 @@
     <link href="http://gallonyin.github.io/2017/04/09/Android%20Study/"/>
     <id>http://gallonyin.github.io/2017/04/09/Android Study/</id>
     <published>2017-04-09T10:01:00.000Z</published>
-    <updated>2017-04-09T11:16:18.585Z</updated>
+    <updated>2017-04-09T11:19:38.353Z</updated>
     
     <content type="html"><![CDATA[<h4 id="写在前头"><a href="#写在前头" class="headerlink" title="写在前头"></a>写在前头</h4><p>从 0 开始 Android 之路，你如何不断进步？一年半 Android 的小白的自省，因为我最近有可能转做 Java 了所以，回过头看，把自己的经验记录下来，供自己回忆和旁人参考。</p>
 <a id="more"></a>
 <h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><ul>
-<li><p><strong>一定要会用「 Google 」而不仅是「 百度 」。</strong>  </p>
+<li><p><strong>一定要会用「 Google 」而不仅是「 百度 」。</strong>   </p>
 <p>常见第一个现象就是一个问题百度搜出来的结果都是千篇一律，转载还算好的，(侵权)抄袭很严重，而且很多知识点根本都没有实践，常常会误导，我如果写博客，自己写的东西一定是自己反复实践过的，把这些宝贵的经验总结出来对后来人有一点帮助，就够了。第二个现象是，百度搜索的结果第一屏总是全是广告，而且，比较隐蔽，体验极差，太多招黑的事情这里就不多描述了。</p>
 <p>总之，对于做技术的我来说，就像知名博主 stormzhang 所说的，“ Google + Stackoverflow + GitHub 就再也没有解决不了的问题了，而某种意义上，开发其实主要就是解决问题的能力！”。如果你刚想尝试，发现用不了 Google 搜索，那么你需要学会一件事：用「 百度 」帮助你去学会怎么使用「 Google 」，就像新的 windows 系统，第一件事总是用「 IE 」去下载新的浏览器。</p>
 </li>
