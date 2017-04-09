@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="Gallon Yin"><meta name="description" content="写在前头从0开始Android之路，你如何不断进步？一年半Android的小白的自省，因为我最近有可能转做Java了所以，回过头看，把自己的经验记录下来，供自己回忆和旁人参考。"><meta name="keywords" content=""><title>Andoird 修炼手册 · Gallon's World</title><link rel="icon" href="/website.ico"><link rel="canonical" href="http://gallonyin.github.io/2017/04/09/Android Study/"><link rel="alternate" href="/atom.xml" title="Gallon's World"><link rel="stylesheet" href="/css/style.css"><script type="text/javascript">var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?Your baidu Analytics ID";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script type="text/javascript">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'Your Google Analytics ID', 'auto');
+ga('send', 'pageview');</script></head><body><div id="main"><header><a href="/." class="logo">Gallon's World</a><ul class="nav"><li class="nav-link"><a href="/" target="_self">Home</a></li><li class="nav-link"><a href="/archives/" target="_self">Archives</a></li><li class="nav-link"><a href="/about/" target="_self">About</a></li></ul></header><section id="container"><article class="post"><h1 class="post-title">Andoird 修炼手册</h1><span class="post-time">Apr 9, 2017</span><div id="sidebar" class="post-sidebar"><h3 class="heading">Contents</h3><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#写在前头"><span class="toc-text">写在前头</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#正文"><span class="toc-text">正文</span></a></li></ol></div><div class="post-content"><h4 id="写在前头"><a href="#写在前头" class="headerlink" title="写在前头"></a>写在前头</h4><p>从 0 开始 Android 之路，你如何不断进步？一年半 Android 的小白的自省，因为我最近有可能转做 Java 了所以，回过头看，把自己的经验记录下来，供自己回忆和旁人参考。</p>
+<a id="more"></a>
+<h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><ul>
+<li><p><strong>一定要会用「 Google 」而不仅是「 百度 」。</strong> </p>
+<p>常见第一个现象就是一个问题百度搜出来的结果都是千篇一律，转载还算好的，(侵权)抄袭很严重，而且很多知识点根本都没有实践，常常会误导，我如果写博客，自己写的东西一定是自己反复实践过的，把这些宝贵的经验总结出来对后来人有一点帮助，就够了。第二个现象是，百度搜索的结果第一屏总是全是广告，而且，比较隐蔽，体验极差，太多招黑的事情这里就不多描述了。</p>
+<p>总之，对于做技术的我来说，就像知名博主 stormzhang 所说的，“ Google + Stackoverflow + GitHub 就再也没有解决不了的问题了，而某种意义上，开发其实主要就是解决问题的能力！”。如果你刚想尝试，发现用不了 Google 搜索，那么你需要学会一件事：用「 百度 」帮助你去学会怎么使用「 Google 」，就像新的 windows 系统，第一件事总是用「 IE 」去下载新的浏览器。</p>
+</li>
+<li><p><strong>一定要去学英文，并且打心底去拥抱她。</strong></p>
+<p>很多人并不是学会不会英语，编程都会，英语学不会？但是如果从学校出来之后英语基础没打好，可能对英文网站更有一种恐惧感、厌恶感，不愿意去看去学，其实大家英语都会有点基础，我们所接触的英文网站(如 github、stackoverflow)上也不会有那么多难懂的单词句子。我推荐点办法：如果一句话有很多不懂的单词，那么就把每个单词都查询一下，再把句义推出来；如果一句话只有一两个不懂的单词，那么先试着推理一下句义，其实很可能你已经知道单词的意思了；如果一句话单词你都知道了，但是句义不清楚，没有捷径，对着翻译多看，既然每天工作都这样坚持看英文，相信我，进步速度是非常非常快的。当然还有很多其实大学就过了四六级的同学，那你们的压力更要小的多，只是愿不愿意的问题，我的答案是当然愿意！</p>
+</li>
+<li><p><strong>一定要在发现问题的时候有深入研究的意愿。</strong></p>
+<p>你在自己的项目中有没有遇到是棘手的问题？你是真的发现了问题的根源还是只是”让问题不再复现”？如果某个依赖框架总是报一个莫名其妙的异常，你是否会面对源码排查？很明显，有些问题没有绝对正确的答案，这个项目可能很急，也可能处于各种因素的考虑，需要快速的修复，但是我们作为技术人，要总是有种时时想去深入研究一下的愿望，解决后的成就感是不言而喻的，即使没有解决，你的时间也肯定没有浪费，看过这个框架的源码，设计思想，对你来说一定是一次宝贵的学习机会，这在前期更为重要。如果自己的任务完成，也许有空还可以帮助别人解决 bug，贡献他人是世上少有的增加幸福感的事之一，同事、交流群、活跃的社区，你一定发现过别人的求助，你当时是什么态度呢？</p>
+</li>
+<li><p><strong>一定要在自己的产品或项目中想方设法持续做优化。</strong></p>
+<p>问题没有发现，可能是你不懂测试，有时候看起来一样的 APP 实际的质量差距非常大，很多低级和高级工程师的差距也会在这些过程中有差距。页面数据加载更合理；内存优化更好；配置参数找到平衡点等。可以通过学习 github 上别人写的框架；使用一些内存泄漏检测工具，如「 LeakCanary 」；了解图片的缓存和色彩模式(Android 中的图片加载绝对是个大骨头)。</p>
+</li>
+<li><p><strong>一定要留一些时间去写或看工作外的项目。</strong></p>
+<p>你的产品或项目不可能总会用最新的最热的框架，甚至可能是有点落后的，但是并不一定你想换就能换，这中间问题就很多，稳定性，兼容性，team work，学习/风险成本等，但是这不能成为你自己止步不前的借口， 想要更快速的成长，你必须有所行动，勇于去尝试新的技术，了解先进的项目在用些什么，这样即使你以后有更好的升职或跳槽机会，幸运女神也会给你更多的眷顾。</p>
+</li>
+<li><p><strong>一定不要放弃阅读。</strong></p>
+<p>你可以有很多兴趣爱好，因为时间总是有限的，在现状下其实只能列个清单，排出个优先级，但是，阅读请一定要保持下去。可以是技术相关的，JVM、数据结构、操作系统，也可以是非技术相关的，小说、心理学、经济学、哲学、传记、励志鸡汤等都可以广泛涉猎，万一以后你用上了呢？一点也没用上，我相信也会开拓你的视野，提升你的品味吧，这些可能在你的工作中很难了解到。现在公众号、各种移动社区也都有非常好的资源，我们可以更好的利用我们的碎片化时间，比如阅读。久而久之，必定有所提升。</p>
+</li>
+<li><p><strong>一定不要放弃运动。</strong></p>
+<p>其实我没什么资格说的。基本每天的运动量就是上下班走的一段路，每天平均八千步吧，但是，为了我们的健康，还是要更多运动，共勉。</p>
+</li>
+</ul>
+</div></article><div class="tags"></div><div class="paginator"><a href="/2017/03/12/Buffered/" class="next"><span>Next</span><i class="iconfont icon-right"></i></a></div><section id="comments"><div data-thread-key="http://gallonyin.github.io/2017/04/09/Android Study/index.html" data-title="Andoird 修炼手册" data-url="http://gallonyin.github.io/2017/04/09/Android Study/index.html" class="ds-thread"></div><script type="text/javascript">var duoshuoQuery = {short_name: "gallonyin" };
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></section></section><footer><div class="social"><a href="https://github.com/gallonyin" title="github" class="iconfont icon-github"></a></div><div class="copyright"><p class="power">Powered by <a href="https://hexo.io/">Hexo</a> and Theme by <a href="https://github.com/ahonn/hexo-theme-even"> Even</a></p><p class="since">&copy;2016-2017<span class="heart"><i class="iconfont icon-heart"></i></span><span class="author">Gallon Yin</span></p></div><div id="back2top"><i class="iconfont icon-up"></i></div></footer></div><script src="/js/zepto.min.js"></script><script src="/js/theme.js"></script></body></html>
