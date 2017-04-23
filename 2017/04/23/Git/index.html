@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="Gallon Yin"><meta name="description" content="####我们为什么选择Git目前如果你如果进行项目开发有一定规范，那么肯定会使用版本控制系统(VersionControlSystem)，目前比较流行两个就是SVN和Git。Git有很多优点，其中很显著的一点，就是版本的分支(branch)和合并(merge)十分方便"><meta name="keywords" content=""><title>Git 版本控制系统规范 · Gallon's World</title><link rel="icon" href="/website.ico"><link rel="canonical" href="http://gallonyin.github.io/2017/04/23/Git/"><link rel="alternate" href="/atom.xml" title="Gallon's World"><link rel="stylesheet" href="/css/style.css"><script type="text/javascript">var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?Your baidu Analytics ID";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script type="text/javascript">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'Your Google Analytics ID', 'auto');
+ga('send', 'pageview');</script></head><body><div id="main"><header><a href="/." class="logo">Gallon's World</a><ul class="nav"><li class="nav-link"><a href="/" target="_self">Home</a></li><li class="nav-link"><a href="/archives/" target="_self">Archives</a></li><li class="nav-link"><a href="/categories" target="_self">Categories</a></li><li class="nav-link"><a href="/about/" target="_self">About</a></li></ul></header><section id="container"><article class="post"><h1 class="post-title">Git 版本控制系统规范</h1><span class="post-time">Apr 23, 2017</span><div class="post-content"><p>####我们为什么选择 Git<br>目前如果你如果进行项目开发有一定规范，那么肯定会使用版本控制系统(Version Control System)，目前比较流行两个就是 SVN 和 Git。Git有很多优点，其中很显著的一点，就是版本的分支(branch)和合并(merge)十分方便，相对也占用更少的硬盘空间。</p>
+<p>####我们的管理规范<br>我们公司使用了 Git + YouTrack 配合进行版本控制，我先简单说一下我们现在的流程规范(如果你还没用过 Git 可以跳过)。</p>
+<p>首先，我们有一个主分支 Master，这里只有稳定的可用版本，Master 上的每个版本就是拿来可以用的对应版本号的发布版本(含已发布版本和待发布版本)，Master 是不允许随意改动的。</p>
+<p>第二，从 Master 唯一新建分支，开发分支 Develop，该项目所有开发者在完成新模块或修复异常等一个具体任务后，可以合并到 Develop 进行联合测试。</p>
+<p>第三，从开发分支 Develop，以开发者名新建分支，如 gallon、sfs、jksfood 等，作为单个开发者的开发分支。</p>
+<p>第四，从自己的开发分支(如 gallon)再新建分支(该分支通过 Android Studio 内置的 YouTrack 就会自动提示创建一个任务分支，前提是 AS 的 Git 要和远端仓库关联起来)，现在只要把一个个 Task 任务发布到 YouTrack 就可以了，当这个任务完成后，需要你把任务分支合并到自己的分支(gallon)，自己运行可以跑通(通常这里不会有任何问题，因为理论上 gallon 是一直低于任务分支版本的)之后再提交到 develop 分支上，让 Android 组长或负责人或测试人员去检验，如果没有问题到此这个任务就算是 done 了。</p>
+<p>####我自己的使用感受<br>以上看起来步步都很清晰，你在什么阶段在什么分支上做什么事，但是，我们来想这么一个情况，如果我有两个 Task 但是他们有很多重叠代码，我可以去同时做这两个任务，但是根据管理规范你只应该在一个分支上专注你的那个 Task，而且领导只知道看 YouTrack 上已经确定好的一条条任务给你做绩效评定呢，结果新建了两个任务分支 A 和 B，你猜的到的，效率会非常低，但是也有一点好处，你能更加专注的做好这一个任务，想想规范一些也不错，那么还有另外一种情况，突然又有新的需要优先去处理的 Task，你需要先把当前的任务分支本地提交，注意，这时因为该任务没完成，我们通常不会把这个任务分支 A 合并到 gallon 分支(正确的做法是该任务完成后合并)，然后切换到 gallon 分支，然后创建新任务分支 B，这时候 B 是落后 A 版本的，你在分支 A 中修改的代码都不能在分支 B 中看到，但如果有些你需要用到的代码，是的，要么在 B 中重新写一份(可能还是要小小的解决一下冲突)，要么等两个任务都完成了，合并后再修改重叠部分，如果有些情况你常常要在任务分支 A 和任务分支 B 跳来跳去，那可能结果是你要不停解决你自己的冲突，听起来是不是很好笑？好吧，我可能是做惯了多线程操作，常常同一时间做几个任务，修复一个小异常或调整布局与开发新功能同时在编译安装的时候进行等。这种规范对我的编程可以说是加了限制。</p>
+<p>但是，我仍然觉得这种规范是很有道理和有必要的，虽然刚开始使用看起来步骤繁多，甚至可能是稍微降低效率的，可是这种规范对任务的正常的推进依然起到了非常重要的作用，对安全性也提供了很大的保证。以后我会建议分配到个人的多个小任务也可以写到一个 Task 当中去，这样也在保证这种规范的情况下，更好的提高效率嘛。</p>
+<p>然而这样就是最先进的或最规范的管理方法了吗？我不知道，有的公司是没有我提到的个人分支的，只需要在 develop 上创建新的任务分支；我之前的公司则是只要在 的velop 上进行开发就行。也许只有适合自己(团队)的，才是最好的。当然，如果你现在连 Git 都还没体验过，肯定是看的一头雾水，赶紧去试试吧！</p>
+</div></article><div class="tags"></div><div class="paginator"><a href="/2017/04/09/Android Study/" class="next"><span>Next</span><i class="iconfont icon-right"></i></a></div><section id="comments"><div data-thread-key="http://gallonyin.github.io/2017/04/23/Git/index.html" data-title="Git 版本控制系统规范" data-url="http://gallonyin.github.io/2017/04/23/Git/index.html" class="ds-thread"></div><script type="text/javascript">var duoshuoQuery = {short_name: "gallonyin" };
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></section></section><footer><div class="social"><a href="https://github.com/gallonyin" title="github" class="iconfont icon-github"></a></div><div class="copyright"><p class="power">Powered by <a href="https://hexo.io/">Hexo</a> and Theme by <a href="https://github.com/ahonn/hexo-theme-even"> Even</a></p><p class="since">&copy;2016-2017<span class="heart"><i class="iconfont icon-heart"></i></span><span class="author">Gallon Yin</span></p></div><div id="back2top"><i class="iconfont icon-up"></i></div></footer></div><script src="/js/zepto.min.js"></script><script src="/js/theme.js"></script></body></html>
