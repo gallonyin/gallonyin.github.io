@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="Gallon Yin"><meta name="description" content="首先，一次IO的代价是很高的，所以减少IO次数将会极大提升性能。提高文件读写性能，是每一位开发者都要考虑的，也是本文的核心目的，如果已经对Java中的IO流比较熟悉，可以直接拖到最后看结论。基本概念IO流用来处理设备之间的数据传输，Java对数据的操作是通过"><meta name="keywords" content=""><title> · Gallon's World</title><link rel="icon" href="/website.ico"><link rel="canonical" href="http://gallonyin.github.io/2019/04/06/Wework Location/"><link rel="alternate" href="/atom.xml" title="Gallon's World"><link rel="stylesheet" href="/css/style.css"><script type="text/javascript">var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?Your baidu Analytics ID";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script type="text/javascript">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'Your Google Analytics ID', 'auto');
+ga('send', 'pageview');</script></head><body><div id="main"><header><a href="/." class="logo">Gallon's World</a><ul class="nav"><li class="nav-link"><a href="/" target="_self">Home</a></li><li class="nav-link"><a href="/archives/" target="_self">Archives</a></li><li class="nav-link"><a href="/categories" target="_self">Categories</a></li><li class="nav-link"><a href="/about/" target="_self">About</a></li></ul></header><section id="container"><article class="post"><h1 class="post-title"></h1><span class="post-time">Apr 6, 2019</span><div id="sidebar" class="post-sidebar"><h3 class="heading">Contents</h3><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#基本概念"><span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基本实现"><span class="toc-text">基本实现</span></a></li></ol></div><div class="post-content"><p>首先，一次 IO 的代价是很高的，所以减少 IO 次数将会极大提升性能。提高文件读写性能，是每一位开发者都要考虑的，也是本文的核心目的，如果已经对 Java 中的 IO 流比较熟悉，可以直接拖到最后看结论。</p>
+<h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>IO 流用来处理设备之间的数据传输，Java 对数据的操作是通过流的方式，用于操作流的类都在 IO 包内，按流向分为输入流，输出流；按流操作分为字节流，字符流，其中字节流可以操作任何数据，因为在计算机中任何数据都是以字节的形式存储，字符流只能操作纯字符数据，比较方便。字节流的抽象父类：InputStream，OutputStream；字符流的抽象父类：Reader，Writer。</p>
+<a id="more"></a>  
+<h4 id="基本实现"><a href="#基本实现" class="headerlink" title="基本实现"></a>基本实现</h4><p>由于已知减少 IO 次数可以大幅提升性能，如果我们想进行文件拷贝，最快速的方法是把文件全部读取到内存再全部写出到目标地址，如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">FileInputStream fis = new FileInputStream(&quot;source.rar&quot;);</div><div class="line">FileOutputStream fos = new FileOutputStream(&quot;copy.rar&quot;);</div><div class="line">byte[] arr = new byte[fis.available()];  	  //获得文件大小做为字节数组</div><div class="line">fis.read(arr);								 //将文件上的所有字节读取到数组</div><div class="line">fos.write(arr);								//将数组中的所有字节一次写到文件上</div><div class="line">fis.close();</div><div class="line">fos.close();</div></pre></td></tr></table></figure>
+<p>因为这样就完成了最少的磁盘访问次数，所以 IO 性能很高，但是如果文件过大，就非常容易造成内存溢出。因此我们改进后的代码：  </p>
+</div></article><div class="tags"></div><div class="paginator"><a href="/2017/04/23/Git/" class="next"><span>Next</span><i class="iconfont icon-right"></i></a></div><section id="comments"><div data-thread-key="http://gallonyin.github.io/2019/04/06/Wework Location/index.html" data-title="" data-url="http://gallonyin.github.io/2019/04/06/Wework Location/index.html" class="ds-thread"></div><script type="text/javascript">var duoshuoQuery = {short_name: "gallonyin" };
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></section></section><footer><div class="social"><a href="https://github.com/gallonyin" title="github" class="iconfont icon-github"></a></div><div class="copyright"><p class="power">Powered by <a href="https://hexo.io/">Hexo</a> and Theme by <a href="https://github.com/ahonn/hexo-theme-even"> Even</a></p><p class="since">&copy;2016-2019<span class="heart"><i class="iconfont icon-heart"></i></span><span class="author">Gallon Yin</span></p></div><div id="back2top"><i class="iconfont icon-up"></i></div></footer></div><script src="/js/zepto.min.js"></script><script src="/js/theme.js"></script></body></html>
