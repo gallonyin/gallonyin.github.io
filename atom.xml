@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://gallonyin.github.io/"/>
-  <updated>2019-04-06T15:28:36.834Z</updated>
+  <updated>2019-04-06T15:42:07.621Z</updated>
   <id>http://gallonyin.github.io/</id>
   
   <author>
@@ -16,26 +16,38 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title></title>
+    <title>企业微信打卡定位 Xposed Hook [Android]</title>
     <link href="http://gallonyin.github.io/2019/04/06/Wework%20Location/"/>
     <id>http://gallonyin.github.io/2019/04/06/Wework Location/</id>
-    <published>2019-04-06T15:26:52.502Z</published>
-    <updated>2019-04-06T15:28:36.834Z</updated>
+    <published>2019-04-06T15:42:00.000Z</published>
+    <updated>2019-04-06T15:42:07.621Z</updated>
     
-    <content type="html"><![CDATA[<p>首先，一次 IO 的代价是很高的，所以减少 IO 次数将会极大提升性能。提高文件读写性能，是每一位开发者都要考虑的，也是本文的核心目的，如果已经对 Java 中的 IO 流比较熟悉，可以直接拖到最后看结论。</p>
-<h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>IO 流用来处理设备之间的数据传输，Java 对数据的操作是通过流的方式，用于操作流的类都在 IO 包内，按流向分为输入流，输出流；按流操作分为字节流，字符流，其中字节流可以操作任何数据，因为在计算机中任何数据都是以字节的形式存储，字符流只能操作纯字符数据，比较方便。字节流的抽象父类：InputStream，OutputStream；字符流的抽象父类：Reader，Writer。</p>
+    <content type="html"><![CDATA[<p>本文原理对大部分 Android 应用适用，直接进入主题。</p>
+<h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><ul>
+<li>方案一：Android 手机已取得 <strong>Root</strong> 权限，并成功安装 <strong>Xposed</strong> 插件，大部分国产机的系统目前对获取权限的支持都很不友好，高版本系统安装 Xposed 还可能造成系统变软砖等问题，仅适用爱折腾的同学。</li>
+<li>方案二：在手机安装 <strong>VirtualXposed</strong>，这里是它的<a href="https://github.com/android-hacker/VirtualXposed/releases" target="_blank" rel="external">下载页面</a>，类似一个运行在 Android 上的开源虚拟机，可以把手机内的程序拖到该虚拟机里，就可以使用插件啦，推荐第二种方式。</li>
+</ul>
+<p>提示：1.Android 9.0 暂不支持上面两种方案。2.类似的 VirtualXposed 的软件还有<a href="https://github.com/taichi-framework/TaiChi" target="_blank" rel="external">太极</a>等。</p>
 <a id="more"></a>  
-<h4 id="基本实现"><a href="#基本实现" class="headerlink" title="基本实现"></a>基本实现</h4><p>由于已知减少 IO 次数可以大幅提升性能，如果我们想进行文件拷贝，最快速的方法是把文件全部读取到内存再全部写出到目标地址，如</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">FileInputStream fis = new FileInputStream(&quot;source.rar&quot;);</div><div class="line">FileOutputStream fos = new FileOutputStream(&quot;copy.rar&quot;);</div><div class="line">byte[] arr = new byte[fis.available()];  	  //获得文件大小做为字节数组</div><div class="line">fis.read(arr);								 //将文件上的所有字节读取到数组</div><div class="line">fos.write(arr);								//将数组中的所有字节一次写到文件上</div><div class="line">fis.close();</div><div class="line">fos.close();</div></pre></td></tr></table></figure>
-<p>因为这样就完成了最少的磁盘访问次数，所以 IO 性能很高，但是如果文件过大，就非常容易造成内存溢出。因此我们改进后的代码：  </p>
+<h2 id="Xposed简介"><a href="#Xposed简介" class="headerlink" title="Xposed简介"></a>Xposed简介</h2><p>Xposed框架（Xposed framework）是一套开放源代码的、在Android高权限模式下运行的框架服务，可以在不修改APK文件的情况下修改程序的运行（修改系统），简单的说，就是通过反射找到我们需要 Hook 的类、方法、属性并修改它，事实上我们几乎可以做所有事，本例我们就是利用插件修改应用运行时获取位置信息的方法，实现任意位置打卡（虽然我们并没有迟到）。<br>至于 Xposed 的原理，是替换 /system/bin/app_precesss 程序控制 zygote 进程，使得它在系统启动的过程中会加载 Xposed framework 的 XposedBridge.jar 文件（也就是每个进程开启都被会被添加一些神秘代码），应用自然就可以被劫持了。</p>
+<h2 id="定位原理"><a href="#定位原理" class="headerlink" title="定位原理"></a>定位原理</h2><p>应用一般可通过多种方式进行定位，如 GPS 定位、WIFI 定位、基站定位、AGPS 定位，而且通常会混合同时使用，我们使用 Xposed 开发中，可以让应用调用一些获取位置的方法失效，而引导到我们希望应用调用的方法:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//基站定位相关</span></div><div class="line">android.telephony.<span class="function">TelephonyManager</span></div><div class="line">	<span class="title">getCellLocation</span><span class="params">()</span></div><div class="line">	<span class="title">getAllCellInfo</span><span class="params">()</span></div><div class="line">android.telephony.PhoneStateListener</div><div class="line">	<span class="title">onCellLocationChanged</span><span class="params">(cellLocation)</span></div><div class="line">	<span class="title">onCellInfoChanged</span><span class="params">()</span></div><div class="line"><span class="comment">//WIFI定位相关</span></div><div class="line">android.net.wifi.WifiManager</div><div class="line">	<span class="title">getScanResults</span><span class="params">()</span></div><div class="line">	<span class="title">getWifiState</span><span class="params">()</span></div><div class="line">	<span class="title">isWifiEnabled</span><span class="params">()</span></div><div class="line">	<span class="title">getMacAddress</span><span class="params">()</span></div><div class="line">	<span class="title">getSSID</span><span class="params">()</span></div><div class="line">	<span class="title">getBSSID</span><span class="params">()</span></div><div class="line"><span class="comment">//获取网络状态</span></div><div class="line">android.net.NetworkInfo</div><div class="line">	<span class="title">isConnectedOrConnecting</span><span class="params">()</span></div><div class="line">	<span class="title">isConnected</span><span class="params">()</span></div><div class="line">	<span class="title">isAvailable</span><span class="params">()</span></div><div class="line"><span class="comment">//下面是关键的，要修改经纬度坐标的方法</span></div><div class="line">android.location.LocationManager</div><div class="line">	<span class="title">getLastLocation</span><span class="params">()</span></div><div class="line">	<span class="title">getLastKnownLocation</span><span class="params">(string)</span></div><div class="line">	<span class="title">getProviders</span><span class="params">()</span></div><div class="line">	<span class="title">getBestProvider</span><span class="params">(criteria, <span class="keyword">boolean</span>)</span></div><div class="line">	<span class="title">requestLocationUpdates</span><span class="params">(...)</span></div><div class="line">	<span class="title">requestSingleUpdate</span><span class="params">(...)</span></div></pre></td></tr></table></figure></p>
+<p>首先让基站定位和 WIFI 定位的方法都返回失败，让应用继续去请求其他定位方式，然后通过修改 providers 等方法返回值，最终引导应用去请求 GPS 位置，最后我们只要伪造一个 Location 返回给应用调用就可以啦。<br>具体代码请移步 <a href="https://github.com/gallonyin/weworkhook" target="_blank" rel="external">GitHub</a> 仓库，修改这些方法中调用的经纬度坐标，我们就成功把应用程序 “欺骗” 了。<br>然后只要写一个页面接入地图，把经纬度坐标传到我们的插件就大功告成了。</p>
+<h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><p>笔者使用腾讯地图 API 但是发现坐标系和企业微信里的有一些不一致，所以做了一定调整适配它，并且在每次调用定位方法时做加盐处理。更具体的实现可以参考代码实现。<br>VirtualXposed 能满足日常使用，但偶尔会出现不稳定情况，可能和机型也有关，原生 Root 则很稳定。</p>
+<h2 id="仓库地址"><a href="#仓库地址" class="headerlink" title="仓库地址"></a>仓库地址</h2><p> <a href="https://github.com/gallonyin/weworkhook" target="_blank" rel="external">weworkhook</a></p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;首先，一次 IO 的代价是很高的，所以减少 IO 次数将会极大提升性能。提高文件读写性能，是每一位开发者都要考虑的，也是本文的核心目的，如果已经对 Java 中的 IO 流比较熟悉，可以直接拖到最后看结论。&lt;/p&gt;
-&lt;h4 id=&quot;基本概念&quot;&gt;&lt;a href=&quot;#基本概念&quot; class=&quot;headerlink&quot; title=&quot;基本概念&quot;&gt;&lt;/a&gt;基本概念&lt;/h4&gt;&lt;p&gt;IO 流用来处理设备之间的数据传输，Java 对数据的操作是通过流的方式，用于操作流的类都在 IO 包内，按流向分为输入流，输出流；按流操作分为字节流，字符流，其中字节流可以操作任何数据，因为在计算机中任何数据都是以字节的形式存储，字符流只能操作纯字符数据，比较方便。字节流的抽象父类：InputStream，OutputStream；字符流的抽象父类：Reader，Writer。&lt;/p&gt;
+      &lt;p&gt;本文原理对大部分 Android 应用适用，直接进入主题。&lt;/p&gt;
+&lt;h2 id=&quot;运行环境&quot;&gt;&lt;a href=&quot;#运行环境&quot; class=&quot;headerlink&quot; title=&quot;运行环境&quot;&gt;&lt;/a&gt;运行环境&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;方案一：Android 手机已取得 &lt;strong&gt;Root&lt;/strong&gt; 权限，并成功安装 &lt;strong&gt;Xposed&lt;/strong&gt; 插件，大部分国产机的系统目前对获取权限的支持都很不友好，高版本系统安装 Xposed 还可能造成系统变软砖等问题，仅适用爱折腾的同学。&lt;/li&gt;
+&lt;li&gt;方案二：在手机安装 &lt;strong&gt;VirtualXposed&lt;/strong&gt;，这里是它的&lt;a href=&quot;https://github.com/android-hacker/VirtualXposed/releases&quot;&gt;下载页面&lt;/a&gt;，类似一个运行在 Android 上的开源虚拟机，可以把手机内的程序拖到该虚拟机里，就可以使用插件啦，推荐第二种方式。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;提示：1.Android 9.0 暂不支持上面两种方案。2.类似的 VirtualXposed 的软件还有&lt;a href=&quot;https://github.com/taichi-framework/TaiChi&quot;&gt;太极&lt;/a&gt;等。&lt;/p&gt;
     
     </summary>
+    
+      <category term="技术" scheme="http://gallonyin.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
     
     
   </entry>
