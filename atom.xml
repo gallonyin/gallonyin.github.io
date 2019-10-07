@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://gallonyin.github.io/"/>
-  <updated>2019-10-07T15:21:44.322Z</updated>
+  <updated>2019-10-07T15:48:32.603Z</updated>
   <id>http://gallonyin.github.io/</id>
   
   <author>
@@ -20,17 +20,18 @@
     <link href="http://gallonyin.github.io/2019/05/11/Android%20Parallel%20Space/"/>
     <id>http://gallonyin.github.io/2019/05/11/Android Parallel Space/</id>
     <published>2019-05-11T11:33:00.000Z</published>
-    <updated>2019-10-07T15:21:44.322Z</updated>
+    <updated>2019-10-07T15:48:32.603Z</updated>
     
-    <content type="html"><![CDATA[<p>##常见的分身/多开</p>
+    <content type="html"><![CDATA[<p>目前很多人都会有应用多开和系统分身的需要，多个帐号要登录在一个手机，或者体验下一个手机两个系统自由切换的感觉，完全隔离，隐私再也不怕被翻到。本文主要是通过系统隐藏 API 调用来完成系统分身，使用 Android 多用户机制，注意这里系统分为两种：1.应用在两个用户中(如 MIUI 中的系统分身) 2.影子用户，双开应用显示在原用户桌面中(如 MIUI 中的应用双开)。两种情况差不多，都是要先创建用户，然后需要显示在原桌面就再调用一下 API 即可。</p>
+<a id="more"></a>  
+<p><strong>常见的分身/多开</strong></p>
 <ol>
 <li>工具修改包名，早的时候可以，现在的应用，换包名功能就残缺不能好好用了..</li>
 <li>修改 Framework（Android多用户机制。例：小米分身、访客模式等），国产手机中挺常见。但如果系统不提供该功能，自己很难开分身，本文就是告诉你怎么开了它。</li>
 <li>通过虚拟化技术实现（例：360分身大师、LBE平行空间），这个应用索要权限非常高，别轻易使用非官方的该类软件。</li>
 <li>以插件机制运行</li>
 </ol>
-<p>目前很多人都会有应用多开和系统分身的需要，多个帐号要登录在一个手机，或者体验下一个手机两个系统自由切换的感觉，完全隔离，隐私再也不怕被翻到。本文主要是通过系统隐藏 API 调用来完成系统分身，使用 Android 多用户机制，注意这里系统分为两种：1.应用在两个用户中(如 MIUI 中的系统分身) 2.影子用户，双开应用显示在原用户桌面中(如 MIUI 中的应用双开)。两种情况差不多，都是要先创建用户，然后需要显示在原桌面就再调用一下 API 即可。</p>
-<p>主要手机配置足够高，你理论上可以建无数个系统分身和多开应用。<br>后面的内容全是针对<strong>多用户机制</strong>的操作办法啦。</p>
+<p>后面的内容全是针对<strong>多用户机制</strong>的操作办法啦。</p>
 <h2 id="Android与Linux的用户概念异同"><a href="#Android与Linux的用户概念异同" class="headerlink" title="Android与Linux的用户概念异同"></a>Android与Linux的用户概念异同</h2><p>从 Android 5.0 开始引入多用户 API，都是隐藏 API 且需要系统签名并持有 managed_user 相关权限，虽然 Android 是基于 Linxu 系统，但两者账户管理体系不通，可以多用 ps 命令观察应用所属及 Android 应用的 <strong>uid</strong>，下面的 u0<em>a144 即为微信进程 uid，:push 结尾的进程则是微信的推送进程（对，这是个多进程应用），u0</em> 代表该进程运行在 <strong>id</strong> 为 <strong>0</strong> 的用户上。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">shell<span class="meta">@rolex</span>:/ $ ps | grep tencent</div><div class="line">u0_a144   <span class="number">29866</span> <span class="number">623</span>   <span class="number">1762984</span> <span class="number">236024</span>            <span class="number">0000000000</span> R com.tencent.mm</div><div class="line">u0_a144   <span class="number">30068</span> <span class="number">623</span>   <span class="number">1611740</span> <span class="number">98396</span> SyS_epoll_ <span class="number">0000000000</span> S com.tencent.mm:push</div></pre></td></tr></table></figure></p>
 <h2 id="要使用的技术和工具"><a href="#要使用的技术和工具" class="headerlink" title="要使用的技术和工具"></a>要使用的技术和工具</h2><p>即使 root 提权应用但如果不是系统签名应用仍然不能调用成功，这也是为什么本文要使用 frida 来 hook 系统应用的原因（使用 Xposed 同样可以做到，熟悉的同学可以自己尝试）。下面直接使用代码演示，实战开始！为什么使用 frida 框架写而不用 xposed 呢，当然是因为 frida 快啦，而且手机只要 root 就可以用，不用担心 xposed 安装不上去的情况，当然，本文就不科普 frida 使用了。如果之前从没听说过 frida …<a href="https://blog.csdn.net/jiangwei0910410003/article/details/80372118" target="_blank" rel="external">推荐这篇</a><br>提示：</p>
 <ol>
@@ -48,15 +49,12 @@
 </ol>
 <p>启动微信和影子微信后查看进程</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">shell<span class="meta">@rolex</span>:/ $ ps | grep tencent</div><div class="line">u10_a144 <span class="number">9054</span>  <span class="number">623</span>   <span class="number">1672156</span> <span class="number">172756</span> binder_thr <span class="number">0000000000</span> S com.tencent.mm</div><div class="line">u10_a144 <span class="number">9234</span>  <span class="number">623</span>   <span class="number">1610788</span> <span class="number">95400</span> futex_wait <span class="number">0000000000</span> S com.tencent.mm:push</div><div class="line">u0_a144   <span class="number">29866</span> <span class="number">623</span>   <span class="number">1855536</span> <span class="number">159340</span> SyS_epoll_ <span class="number">0000000000</span> S com.tencent.mm</div><div class="line">u0_a144   <span class="number">30068</span> <span class="number">623</span>   <span class="number">1605200</span> <span class="number">58676</span> SyS_epoll_ <span class="number">0000000000</span> S com.tencent.mm:push</div></pre></td></tr></table></figure>
-<p>具体源码已放到 <a href="https://github.com/gallonyin/frida_collection/blob/master/frida_android/create_user/frida-nexus-user.py" target="_blank" rel="external">GitHub 仓库</a>，以上就是一次多开应用的实战操作，不同版本可能存在部分 API 小改动，也可能有的手机商系统会改动较大，本文只是抛砖引玉，有什么问题可以留言讨论，GitHub上有联系邮箱~</p>
+<p>具体源码已放到 <a href="https://github.com/gallonyin/frida_collection/blob/master/frida_android/create_user/frida-nexus-user.py" target="_blank" rel="external">GitHub 仓库</a>，以上就是一次多开应用的实战操作，不同版本可能存在部分 API 小改动，也可能有的手机商系统会改动较大，本文只是抛砖引玉，有什么问题可以留言讨论，页面有联系邮箱~</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;##常见的分身/多开&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;工具修改包名，早的时候可以，现在的应用，换包名功能就残缺不能好好用了..&lt;/li&gt;
-&lt;li&gt;修改 Framework（Android多用户机制。例：小米分身、访客模式等），国产手机中挺常见。但如果系统不提供该功能，自己很难开分
+      &lt;p&gt;目前很多人都会有应用多开和系统分身的需要，多个帐号要登录在一个手机，或者体验下一个手机两个系统自由切换的感觉，完全隔离，隐私再也不怕被翻到。本文主要是通过系统隐藏 API 调用来完成系统分身，使用 Android 多用户机制，注意这里系统分为两种：1.应用在两个用户中(如 MIUI 中的系统分身) 2.影子用户，双开应用显示在原用户桌面中(如 MIUI 中的应用双开)。两种情况差不多，都是要先创建用户，然后需要显示在原桌面就再调用一下 API 即可。&lt;/p&gt;
     
     </summary>
     
